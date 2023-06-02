@@ -8,9 +8,9 @@
     deployment_name: suiservd
     deployment_snarked: ../scripts/snarked.sh
     deployment_staged: ../scripts/staged.sh
-    deployment_workdir: /opt/ledgers
-    deployment_ledgers_workdir: /opt/ledgers
-    deployment_service: ledgers
+    deployment_workdir: /opt/suiservd
+    deployment_ledgers_workdir: /opt/suiservd
+    deployment_service: suiservd
 
   roles:
   - staketab.ledgers-deployment
