@@ -7,7 +7,7 @@ import (
 )
 
 var RootCmd = &cobra.Command{
-	Use:   "suiservd",
+	Use:   binary,
 	Short: "SUI tool to merge-coins, withdraw stakets and others.",
 	Long:  "SUI tool to merge-coins, withdraw stakets and others.",
 	Run: func(cmd *cobra.Command, args []string) {
