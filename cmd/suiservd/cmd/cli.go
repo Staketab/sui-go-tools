@@ -15,3 +15,10 @@ var RootCmd = &cobra.Command{
 		fmt.Println("Welcome to My CLI!")
 	},
 }
+
+func initConfig() {
+	err := createDirectory(".sui-config/")
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+}

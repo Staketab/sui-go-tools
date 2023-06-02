@@ -8,9 +8,20 @@ import (
 )
 
 func init() {
+	RootCmd.AddCommand(initCommand)
 	RootCmd.AddCommand(mergecoinCommand)
 	RootCmd.AddCommand(withdrawCommand)
 	RootCmd.AddCommand(versionCommand)
+}
+
+var initCommand = &cobra.Command{
+	Use:   "init",
+	Short: "Initialize config",
+	Long:  "Initialize config",
+	Run: func(cmd *cobra.Command, args []string) {
+		initConfig()
+		fmt.Println("Executing subcommand...")
+	},
 }
 
 var mergecoinCommand = &cobra.Command{
