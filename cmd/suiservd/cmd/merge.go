@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"fmt"
@@ -7,9 +7,9 @@ import (
 )
 
 var RootCmd = &cobra.Command{
-	Use:   "mycli",
-	Short: "My CLI application",
-	Long:  "A simple CLI application created using Go",
+	Use:   "suiservd",
+	Short: "SUI tool to merge-coins, withdraw stakets and others.",
+	Long:  "SUI tool to merge-coins, withdraw stakets and others.",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Default behavior when the root command is executed
 		fmt.Println("Welcome to My CLI!")
