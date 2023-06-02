@@ -1,0 +1,16 @@
+---
+- hosts: "{{ servers }}"
+  become: true
+  gather_facts: false
+
+  vars:
+    deployment_artifact: ../build/suiservd
+    deployment_name: suiservd
+    deployment_snarked: ../scripts/snarked.sh
+    deployment_staged: ../scripts/staged.sh
+    deployment_workdir: /opt/ledgers
+    deployment_ledgers_workdir: /opt/ledgers
+    deployment_service: ledgers
+
+  roles:
+  - staketab.ledgers-deployment
