@@ -1,7 +1,7 @@
 package cmd
 
 type Config struct {
-	Database DatabaseConfig `toml:"database"`
+	Database DatabaseConfig `toml:"DEFAULT"`
 }
 
 type DatabaseConfig struct {
