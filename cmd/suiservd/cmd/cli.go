@@ -49,12 +49,18 @@ func readConfig() {
 
 func mergeCoins() {
 	getCoins()
-	primaryCoin := "$primary_coin"
-	coinToMerge := "$id"
+	config, err := ReadConfigFile(configFilePath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	path := config.Default.SuiBinaryPath
+	primaryCoin := config.Default.PrimaryCoin
+	coinToMerge := ""
 	gasBudget := "2000000"
-	gasObjectToPay := "$gas_object_to_pay"
+	gasObjectToPay := config.Default.GasObjToPay
 
-	cmd := exec.Command("sui", "client", "merge-coin",
+	cmd := exec.Command(path, "client", "merge-coin",
 		"--primary-coin", primaryCoin,
 		"--coin-to-merge", coinToMerge,
 		"--gas-budget="+gasBudget,
@@ -62,8 +68,8 @@ func mergeCoins() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	err := cmd.Run()
-	if err != nil {
-		log.Fatal(err)
+	runs := cmd.Run()
+	if runs != nil {
+		log.Fatal(runs)
 	}
 }
