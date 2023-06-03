@@ -71,8 +71,8 @@ primary_coin = ""
 	return nil
 }
 
-func ReadConfigFile(path string) (DatabaseConfig, error) {
-	config := DatabaseConfig{}
+func ReadConfigFile(path string) (Config, error) {
+	config := Config{}
 	tomlFile, err := toml.LoadFile(path)
 	if err != nil {
 		return config, fmt.Errorf("failed to load config file: %s", err)
