@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -42,4 +45,25 @@ func readConfig() {
 	fmt.Println("Address:", config.Default.Address)
 	fmt.Println("Gas object to pay:", config.Default.GasObjToPay)
 	fmt.Println("Primary coin:", config.Default.PrimaryCoin)
+}
+
+func mergeCoins() {
+	getCoins()
+	primaryCoin := "$primary_coin"
+	coinToMerge := "$id"
+	gasBudget := "2000000"
+	gasObjectToPay := "$gas_object_to_pay"
+
+	cmd := exec.Command("sui", "client", "merge-coin",
+		"--primary-coin", primaryCoin,
+		"--coin-to-merge", coinToMerge,
+		"--gas-budget="+gasBudget,
+		"--gas", gasObjectToPay)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

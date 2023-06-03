@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"os"
-	"os/exec"
 	"os/user"
 	"path/filepath"
 	"strings"
@@ -12,23 +14,47 @@ import (
 	toml "github.com/pelletier/go-toml"
 )
 
-func isRpcWorking() bool {
-	infoLog.Println("Start checking node status")
-	cmd := exec.Command("/bin/bash", "-c", "docker exec -i mina mina client status --json | jq -r .sync_status")
-	out, err := cmd.Output()
+func isRpcWorking() {
+	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
-		errorLog.Println("Failed to get node status:", err)
-		return false
+		fmt.Println(err)
+		return
+	}
+	url := config.Default.Rpc
+
+	payload := []byte(`{
+		"jsonrpc": "2.0",
+		"id": "1",
+		"method": "sui_getChainIdentifier",
+		"params": []
+	}`)
+
+	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	status := strings.TrimSpace(string(out))
-	if status != "Synced" {
-		errorLog.Println("Node is not synced, status:", status)
-		return false
+	request.Header.Set("Content-Type", "application/json")
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer response.Body.Close()
+
+	_, err = ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	infoLog.Println("Node is synced, status:", status)
-	return true
+	statusCode := response.StatusCode
+
+	if statusCode == 200 {
+		fmt.Println("RPC is working:", statusCode)
+	} else {
+		fmt.Println("RPC is not working:", statusCode)
+		log.Fatal("Exit...", statusCode)
+	}
 }
 
 func createDirectory(path string) error {
@@ -84,4 +110,26 @@ func ReadConfigFile(path string) (Config, error) {
 	}
 
 	return config, nil
+}
+
+func sendRequest(url string, payload string) (string, error) {
+	request, err := http.NewRequest("POST", url, strings.NewReader(payload))
+	if err != nil {
+		return "", err
+	}
+
+	request.Header.Add("Content-Type", "application/json")
+
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return "", err
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(body), nil
 }
