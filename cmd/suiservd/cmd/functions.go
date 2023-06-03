@@ -50,14 +50,13 @@ func createDirectory(path string) error {
 
 func createConfigFile(path string) error {
 	filePath := filepath.Join(path, "config.toml")
-	content := []byte(`
-						[DEFAULT]
-						rpc = "https://rpc-mainnet.suiscan.xyz:443"
-						sui_binary_path = "/home/sui/sui/target/debug/sui"
-						address = ""
-						gas_odject_to_pay = ""
-						primary_coin = ""
-						`)
+	content := []byte(`[DEFAULT]
+rpc = "https://rpc-mainnet.suiscan.xyz:443"
+sui_binary_path = "/home/sui/sui/target/debug/sui"
+address = ""
+gas_odject_to_pay = ""
+primary_coin = ""
+`)
 
 	err := ioutil.WriteFile(filePath, content, 0644)
 	if err != nil {
