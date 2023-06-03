@@ -8,17 +8,38 @@ import (
 
 var RootCmd = &cobra.Command{
 	Use:   binary,
-	Short: "SUI tool to merge-coins, withdraw stakets and others.",
-	Long:  "SUI tool to merge-coins, withdraw stakets and others.",
+	Short: "SUI tool to merge-coins, withdraw stakes and others.",
+	Long:  "SUI tool to merge-coins, withdraw stakes and others.",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Default behavior when the root command is executed
-		fmt.Println("Welcome to My CLI!")
+		fmt.Println("Welcome to My:", binary)
 	},
 }
 
 func initConfig() {
-	err := createDirectory(".sui-config/")
+	err := createDirectory(configPath)
 	if err != nil {
 		errorLog.Fatal(err)
 	}
+}
+
+func initConfigFile() {
+	err := createConfigFile(configPath)
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+}
+
+func readConfig() {
+	config, err := ReadConfigFile(configFilePath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("RPC:", config.ConfigToml.Rpc)
+	fmt.Println("SUI binary path:", config.ConfigToml.SuiBinaryPath)
+	fmt.Println("Address:", config.ConfigToml.Address)
+	fmt.Println("Gas object to pay:", config.ConfigToml.GasObjToPay)
+	fmt.Println("Primary coin:", config.ConfigToml.PrimaryCoin)
 }

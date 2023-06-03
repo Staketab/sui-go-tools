@@ -20,7 +20,8 @@ var initCommand = &cobra.Command{
 	Long:  "Initialize config",
 	Run: func(cmd *cobra.Command, args []string) {
 		initConfig()
-		fmt.Println("Executing subcommand...")
+		initConfigFile()
+		readConfig()
 	},
 }
 
