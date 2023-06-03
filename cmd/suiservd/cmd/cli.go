@@ -37,9 +37,9 @@ func readConfig() {
 		return
 	}
 
-	fmt.Println("RPC:", config.Database.Rpc)
-	fmt.Println("SUI binary path:", config.Database.SuiBinaryPath)
-	fmt.Println("Address:", config.Database.Address)
-	fmt.Println("Gas object to pay:", config.Database.GasObjToPay)
-	fmt.Println("Primary coin:", config.Database.PrimaryCoin)
+	fmt.Println("RPC:", config.Default.Rpc)
+	fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
+	fmt.Println("Address:", config.Default.Address)
+	fmt.Println("Gas object to pay:", config.Default.GasObjToPay)
+	fmt.Println("Primary coin:", config.Default.PrimaryCoin)
 }

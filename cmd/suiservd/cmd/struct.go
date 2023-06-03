@@ -1,10 +1,10 @@
 package cmd
 
 type Config struct {
-	Database DatabaseConfig `toml:"DEFAULT"`
+	Default DefaultConfig `toml:"DEFAULT"`
 }
 
-type DatabaseConfig struct {
+type DefaultConfig struct {
 	Rpc           string `toml:"rpc"`
 	SuiBinaryPath string `toml:"sui_binary_path"`
 	Address       string `toml:"address"`
