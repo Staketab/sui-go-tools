@@ -8,6 +8,8 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+
+	toml "github.com/pelletier/go-toml"
 )
 
 func isRpcWorking() bool {
@@ -66,14 +68,13 @@ func createConfigFile(path string) error {
 	return nil
 }
 
-func ReadConfigFile(path string) (Config, error) {
-	config := Config{}
+func ReadConfigFile(path string) (DatabaseConfig, error) {
+	config := DatabaseConfig{}
 
 	tomlFile, err := toml.LoadFile(path)
 	if err != nil {
 		return config, fmt.Errorf("failed to load config file: %s", err)
 	}
-	defer tomlFile.Close()
 
 	err = tomlFile.Unmarshal(&config)
 	if err != nil {
