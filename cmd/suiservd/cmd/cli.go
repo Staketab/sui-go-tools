@@ -24,7 +24,7 @@ func initConfig() {
 }
 
 func initConfigFile() {
-	err := createConfigFile(configPath)
+	err := createConfigFile(configFilePath)
 	if err != nil {
 		errorLog.Fatal(err)
 	}

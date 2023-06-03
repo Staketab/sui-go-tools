@@ -49,7 +49,11 @@ func createDirectory(path string) error {
 }
 
 func createConfigFile(path string) error {
-	filePath := filepath.Join(path, "config.toml")
+	usr, err := user.Current()
+	if err != nil {
+		return fmt.Errorf("failed to get current user: %s", err)
+	}
+	filePath := filepath.Join(usr.HomeDir, path)
 	content := []byte(`[DEFAULT]
 rpc = "https://rpc-mainnet.suiscan.xyz:443"
 sui_binary_path = "/home/sui/sui/target/debug/sui"
@@ -58,8 +62,8 @@ gas_odject_to_pay = ""
 primary_coin = ""
 `)
 
-	err := ioutil.WriteFile(filePath, content, 0644)
-	if err != nil {
+	err2 := ioutil.WriteFile(filePath, content, 0644)
+	if err2 != nil {
 		return fmt.Errorf("failed to create config file: %s", err)
 	}
 
@@ -69,7 +73,6 @@ primary_coin = ""
 
 func ReadConfigFile(path string) (DatabaseConfig, error) {
 	config := DatabaseConfig{}
-
 	tomlFile, err := toml.LoadFile(path)
 	if err != nil {
 		return config, fmt.Errorf("failed to load config file: %s", err)
