@@ -14,17 +14,13 @@ func getCoins() {
 		return
 	}
 	url := config.Default.Rpc
-	// if url != "" {
-	// 	url = config.Default.Rpc
-	// } else {
-	// 	getCoins()
-	// }
+	addr := config.Default.Address
 	payload := `{
 	    "jsonrpc": "2.0",
 	    "id": "1",
 	    "method": "suix_getCoins",
 	    "params": {
-	        "owner": "` + config.Default.Address + `"
+	        "owner": "` + addr + `"
 	    },
 	    "coin_type": "0x2::sui::SUI"
 	}`
@@ -46,8 +42,8 @@ func getCoins() {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
 
-	coinObjectIdVar := result.Result.Data[0].CoinObjectId
-	coinObjectIdVar2 := result.Result.Data[1].CoinObjectId
+	coinObjectIdVar := coinObjectIds[0]
+	coinObjectIdVar2 := coinObjectIds[1]
 
 	fmt.Println("Coin Object IDs array:", coinObjectIds)
 	fmt.Println("Coin Object ID 1 is:", coinObjectIdVar)
