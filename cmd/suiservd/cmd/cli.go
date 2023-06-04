@@ -47,7 +47,7 @@ func readConfig() {
 	fmt.Println("Primary coin:", config.Default.PrimaryCoin)
 }
 
-func mergeCoins(slice []string, payobj, primaryobj, gas string) {
+func mergeCoins(slice []string, payobj, gas, primaryobj string) {
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		fmt.Println(err)
