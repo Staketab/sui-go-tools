@@ -101,10 +101,10 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 			stakesId := value
 
 			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "call",
-				"--package", config.Withdraw.Package,
-				"--module", config.Withdraw.Module,
-				"--function", config.Withdraw.Function,
-				"--args", config.Withdraw.Args,
+				"--package", config.Default.Package,
+				"--module", config.Default.Module,
+				"--function", config.Default.Function,
+				"--args", config.Default.Args,
 				stakesId,
 				"--gas-budget="+gasBudget,
 				"--gas", primaryobj)

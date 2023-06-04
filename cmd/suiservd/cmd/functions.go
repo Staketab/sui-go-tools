@@ -89,8 +89,6 @@ gas_odject_to_pay = ""
 primary_coin = ""
 coins_to_merge = "[]"
 gas_budget = "20000000"
-
-[WITHDRAW]
 package = "0x3"
 module = "sui_system"
 function = "request_withdraw_stake"

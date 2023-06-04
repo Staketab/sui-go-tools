@@ -1,8 +1,7 @@
 package cmd
 
 type Config struct {
-	Default  DefaultConfig  `toml:"DEFAULT"`
-	Withdraw WithdrawConfig `toml:"WITHDRAW"`
+	Default DefaultConfig `toml:"DEFAULT"`
 }
 
 type DefaultConfig struct {
@@ -13,13 +12,10 @@ type DefaultConfig struct {
 	PrimaryCoin   string `toml:"primary_coin"`
 	CoinToMerge   string `toml:"coins_to_merge"`
 	GasBudget     string `toml:"gas_budget"`
-}
-
-type WithdrawConfig struct {
-	Package  string `toml:"package"`
-	Module   string `toml:"module"`
-	Function string `toml:"function"`
-	Args     string `toml:"args"`
+	Package       string `toml:"package"`
+	Module        string `toml:"module"`
+	Function      string `toml:"function"`
+	Args          string `toml:"args"`
 }
 
 type Result struct {
