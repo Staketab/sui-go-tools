@@ -30,8 +30,6 @@ func getCoins() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(jsonStr)
-
 	var result Result
 	err2 := json.Unmarshal([]byte(jsonStr), &result)
 	if err2 != nil {
