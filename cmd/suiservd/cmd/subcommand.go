@@ -39,7 +39,7 @@ var withdrawCommand = &cobra.Command{
 	Short: "Withdrawing all sui::SuiStaked objects",
 	Long:  "Withdrawing all sui::SuiStaked objects",
 	Run: func(cmd *cobra.Command, args []string) {
-		getWithdrawData()
+		getPayObj()
 	},
 }
 
