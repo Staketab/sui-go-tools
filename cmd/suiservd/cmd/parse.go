@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func getCoins() {
+func getMergeData() {
 	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
@@ -51,4 +51,49 @@ func getCoins() {
 	c := coinObjectIds[0]
 
 	mergeCoins(a, b, c)
+}
+
+func getWithdrawData() {
+	isRpcWorking()
+	config, err := ReadConfigFile(configFilePath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	url := config.Default.Rpc
+	addr := config.Default.Address
+	payload := `{
+	    "jsonrpc": "2.0",
+	    "id": "1",
+	    "method": "suix_getStakes",
+	    "params": {
+			"owner": "` + addr + `"
+		},
+		"controller": {}
+	}`
+
+	jsonStr, err := sendRequest(url, payload)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var response Response
+	err2 := json.Unmarshal([]byte(jsonStr), &response)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	var stakedSuiIds []string
+
+	for _, result := range response.Result {
+		for _, stake := range result.Stakes {
+			stakedSuiIds = append(stakedSuiIds, stake.StakedSuiID)
+		}
+	}
+	fmt.Println("Staked Object IDs array:", stakedSuiIds)
+
+	a := stakedSuiIds
+	b := config.Default.GasBudget
+	c := stakedSuiIds[0]
+
+	withdrawStakes(a, b, c)
 }
