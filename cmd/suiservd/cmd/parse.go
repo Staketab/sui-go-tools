@@ -47,11 +47,6 @@ func getMergeData() {
 	} else {
 		infoLog.Println("No coins objects found for merge.")
 	}
-	// if config.Default.Address == "" {
-
-	// } else {
-
-	// }
 }
 
 func getPayObj() {
@@ -88,11 +83,6 @@ func getPayObj() {
 	}
 	infoLog.Println("Coin Object IDs array:", coinObjectIds)
 
-	// if config.Default.Address == "" {
-
-	// } else {
-
-	// }
 	a := coinObjectIds[0]
 
 	getWithdrawData(a)
@@ -134,11 +124,15 @@ func getWithdrawData(obj string) {
 			stakedSuiIds = append(stakedSuiIds, stake.StakedSuiID)
 		}
 	}
-	infoLog.Println("Staked Object IDs array:", stakedSuiIds)
+	if len(stakedSuiIds) != 0 {
+		stakedLen := len(stakedSuiIds)
+		infoLog.Println("Found", stakedLen, "Staked object IDs")
+		a := stakedSuiIds
+		b := config.Default.GasBudget
+		c := obj
 
-	a := stakedSuiIds
-	b := config.Default.GasBudget
-	c := obj
-
-	withdrawStakes(a, b, c)
+		withdrawStakes(a, b, c)
+	} else {
+		infoLog.Println("No Staked object IDs found for withdraw.")
+	}
 }
