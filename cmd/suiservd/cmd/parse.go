@@ -45,7 +45,7 @@ func getMergeData() {
 
 		mergeCoins(a, b, c)
 	} else {
-		infoLog.Println("All coins merged.")
+		infoLog.Println("No coins objects found for merge.")
 	}
 	// if config.Default.Address == "" {
 

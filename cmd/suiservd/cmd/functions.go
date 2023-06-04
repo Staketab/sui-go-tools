@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"os/user"
@@ -15,10 +14,10 @@ import (
 )
 
 func isRpcWorking() {
-	fmt.Println("Start checking RPC status.")
+	infoLog.Println("Start checking RPC status.")
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
-		fmt.Println(err)
+		errorLog.Println(err)
 		return
 	}
 	url := config.Default.Rpc
@@ -32,29 +31,29 @@ func isRpcWorking() {
 
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	if err != nil {
-		log.Fatal(err)
+		errorLog.Fatal(err)
 	}
 
 	request.Header.Set("Content-Type", "application/json")
 
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
-		log.Fatal(err)
+		errorLog.Fatal(err)
 	}
 	defer response.Body.Close()
 
 	_, err = ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatal(err)
+		errorLog.Fatal(err)
 	}
 
 	statusCode := response.StatusCode
 
 	if statusCode == 200 {
-		fmt.Println("RPC is working, status code:", statusCode)
+		infoLog.Println("RPC is working, status code:", statusCode)
 	} else {
-		fmt.Println("RPC is not working, status code:", statusCode)
-		log.Fatal("Exit...", statusCode)
+		infoLog.Println("RPC is not working, status code:", statusCode)
+		errorLog.Fatal("Exit...", statusCode)
 	}
 }
 
@@ -71,7 +70,7 @@ func createDirectory(path string) error {
 		return fmt.Errorf("failed to create directory: %s", err)
 	}
 
-	fmt.Printf("Directory created: %s\n", fullPath)
+	infoLog.Printf("Directory created: %s\n", fullPath)
 	return nil
 }
 
@@ -100,7 +99,7 @@ args = "0x5"
 		return fmt.Errorf("failed to create config file: %s", err)
 	}
 
-	fmt.Printf("Config file created: %s\n", filePath)
+	infoLog.Printf("Config file created: %s\n", filePath)
 	return nil
 }
 

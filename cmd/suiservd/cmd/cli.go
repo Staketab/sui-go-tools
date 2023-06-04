@@ -68,7 +68,8 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "merge-coin",
 				"--primary-coin", primaryCoin,
 				"--coin-to-merge", coinToMerge,
-				"--gas-budget="+gasBudget)
+				"--gas-budget="+gasBudget,
+				"--json")
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 
@@ -106,7 +107,8 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 			"--args", config.Default.Args,
 			stakesId,
 			"--gas-budget="+gasBudget,
-			"--gas", primaryobj)
+			"--gas", primaryobj,
+			"--json")
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
