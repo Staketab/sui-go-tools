@@ -40,17 +40,20 @@ func getMergeData() {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
 	fmt.Println("Coin Object IDs array:", coinObjectIds)
+	if len(coinObjectIds) != 1 {
+		a := coinObjectIds
+		b := config.Default.GasBudget
+		c := coinObjectIds[0]
 
+		mergeCoins(a, b, c)
+	} else {
+		fmt.Println("All coins merged.")
+	}
 	// if config.Default.Address == "" {
 
 	// } else {
 
 	// }
-	a := coinObjectIds
-	b := config.Default.GasBudget
-	c := coinObjectIds[0]
-
-	mergeCoins(a, b, c)
 }
 
 func getPayObj() {

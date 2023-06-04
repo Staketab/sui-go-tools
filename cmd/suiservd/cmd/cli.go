@@ -88,35 +88,31 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 		fmt.Println(err)
 		return
 	}
-	if len(slice) == 1 {
-		for _, value := range slice[1:] {
-			fmt.Println("RPC:", config.Default.Rpc)
-			fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
-			fmt.Println("Primary coin:", primaryobj)
-			fmt.Println("Array value to withdraw:", value)
-			fmt.Println("Gas Budget:", gas)
-			fmt.Println("Gas odject to pay:", primaryobj)
+	for _, value := range slice[1:] {
+		fmt.Println("RPC:", config.Default.Rpc)
+		fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
+		fmt.Println("Primary coin:", primaryobj)
+		fmt.Println("Array value to withdraw:", value)
+		fmt.Println("Gas Budget:", gas)
+		fmt.Println("Gas odject to pay:", primaryobj)
 
-			gasBudget := gas
-			stakesId := value
+		gasBudget := gas
+		stakesId := value
 
-			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "call",
-				"--package", config.Default.Package,
-				"--module", config.Default.Module,
-				"--function", config.Default.Function,
-				"--args", config.Default.Args,
-				stakesId,
-				"--gas-budget="+gasBudget,
-				"--gas", primaryobj)
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
+		cmd := exec.Command(config.Default.SuiBinaryPath, "client", "call",
+			"--package", config.Default.Package,
+			"--module", config.Default.Module,
+			"--function", config.Default.Function,
+			"--args", config.Default.Args,
+			stakesId,
+			"--gas-budget="+gasBudget,
+			"--gas", primaryobj)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
 
-			runs := cmd.Run()
-			if runs != nil {
-				log.Fatal(runs)
-			}
+		runs := cmd.Run()
+		if runs != nil {
+			log.Fatal(runs)
 		}
-	} else {
-		fmt.Println("All coins merged.")
 	}
 }
