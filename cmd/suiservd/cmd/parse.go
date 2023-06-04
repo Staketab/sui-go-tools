@@ -39,5 +39,12 @@ func getCoins() {
 	for _, data := range result.Result.Data {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
+	fmt.Println("Coin Object IDs array:", coinObjectIds)
 
+	a := coinObjectIds
+	b := coinObjectIds[0]
+	c := config.Default.GasBudget
+	d := coinObjectIds[0]
+
+	mergeCoins(a, b, c, d)
 }

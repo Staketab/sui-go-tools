@@ -47,33 +47,31 @@ func readConfig() {
 	fmt.Println("Primary coin:", config.Default.PrimaryCoin)
 }
 
-func fetchPrimaryCoin() {
-
-}
-
-func mergeCoins() {
+func mergeCoins(slice []string, payobj, primaryobj, gas string) {
 	getCoins()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	path := config.Default.SuiBinaryPath
-	primaryCoin := config.Default.PrimaryCoin
-	coinToMerge := ""
-	gasBudget := "2000000"
-	gasObjectToPay := config.Default.GasObjToPay
+	for i := 1; i < len(slice); i++ {
+		path := config.Default.SuiBinaryPath
+		primaryCoin := primaryobj
+		coinToMerge := string(i)
+		gasBudget := gas
+		gasObjectToPay := payobj
 
-	cmd := exec.Command(path, "client", "merge-coin",
-		"--primary-coin", primaryCoin,
-		"--coin-to-merge", coinToMerge,
-		"--gas-budget="+gasBudget,
-		"--gas", gasObjectToPay)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+		cmd := exec.Command(path, "client", "merge-coin",
+			"--primary-coin", primaryCoin,
+			"--coin-to-merge", coinToMerge,
+			"--gas-budget="+gasBudget,
+			"--gas", gasObjectToPay)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
 
-	runs := cmd.Run()
-	if runs != nil {
-		log.Fatal(runs)
+		runs := cmd.Run()
+		if runs != nil {
+			log.Fatal(runs)
+		}
 	}
 }
