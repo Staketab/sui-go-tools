@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -53,15 +54,18 @@ func mergeCoins(slice []string, payobj, gas, primaryobj string) {
 		fmt.Println(err)
 		return
 	}
-	for value := range slice[1:] {
+	for _, value := range slice[1:] {
 		fmt.Println(config.Default.SuiBinaryPath)
 		fmt.Println(primaryobj)
-		fmt.Println(string(rune(value)))
+		fmt.Println(value)
 		fmt.Println(gas)
 		fmt.Println(payobj)
+
+		time.Sleep(5 * time.Second)
+
 		path := config.Default.SuiBinaryPath
 		primaryCoin := primaryobj
-		coinToMerge := string(rune(value))
+		coinToMerge := value
 		gasBudget := gas
 		gasObjectToPay := payobj
 
