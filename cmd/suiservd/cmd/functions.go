@@ -15,6 +15,7 @@ import (
 )
 
 func isRpcWorking() {
+	fmt.Println("Start checking RPC status.")
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		fmt.Println(err)
