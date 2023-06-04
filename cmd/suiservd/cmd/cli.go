@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -48,26 +47,23 @@ func readConfig() {
 	fmt.Println("Primary coin:", config.Default.PrimaryCoin)
 }
 
-func mergeCoins(slice []string, payobj, gas, primaryobj string) {
+func mergeCoins(slice []string, gas, primaryobj string) {
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	for _, value := range slice[1:] {
+		fmt.Println(config.Default.Rpc)
 		fmt.Println(config.Default.SuiBinaryPath)
 		fmt.Println(primaryobj)
 		fmt.Println(value)
 		fmt.Println(gas)
-		fmt.Println(payobj)
-
-		time.Sleep(5 * time.Second)
 
 		path := config.Default.SuiBinaryPath
 		primaryCoin := primaryobj
 		coinToMerge := value
 		gasBudget := gas
-		// gasObjectToPay := payobj
 
 		cmd := exec.Command(path, "client", "merge-coin",
 			"--primary-coin", primaryCoin,

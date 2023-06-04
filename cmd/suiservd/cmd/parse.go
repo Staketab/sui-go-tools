@@ -47,9 +47,8 @@ func getCoins() {
 
 	// }
 	a := coinObjectIds
-	b := coinObjectIds[0]
-	c := config.Default.GasBudget
-	d := coinObjectIds[0]
+	b := config.Default.GasBudget
+	c := coinObjectIds[0]
 
-	mergeCoins(a, b, c, d)
+	mergeCoins(a, b, c)
 }

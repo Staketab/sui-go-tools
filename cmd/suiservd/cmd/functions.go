@@ -81,25 +81,12 @@ func createConfigFile(path string) error {
 	}
 	filePath := filepath.Join(usr.HomeDir, path)
 	content := []byte(`[DEFAULT]
-# SUI Fullnode RPC
 rpc = "https://rpc-testnet.suiscan.xyz:443"
-
-# SUI binary PATH
 sui_binary_path = "/root/sui/target/debug/sui"
-
-# SUI address
 address = "0x5427ad0ec547c505f5ec466a1a31e21c6b0ea07689ee8a4ee0afd94512da3c10"
-
-# ID of the gas object for gas payment, in 20 bytes Hex string If not provided, a gas object with at least gas_budget value will be selected
 gas_odject_to_pay = "0x4ee24f7c513ae2cabcbeaeb14f4b332047990066b89def6460d8ae047e3a4cbe"
-
-# Coin to merge into, in 20 bytes Hex string
 primary_coin = "0x4ee24f7c513ae2cabcbeaeb14f4b332047990066b89def6460d8ae047e3a4cbe"
-
-# Array of Coins to be merged, in 20 bytes Hex string [0x4ee24f7c513ae2cabcbeaeb14f4b332047990066b89def6460d8ae047e3a4cbe 0x5dc3340bd32407e78e5e8fd98766e8bfd63e4981ac42f94789d2075cf1c72330]
-coins_to_merge = []
-
-# Gas budget for this call
+coins_to_merge = "[]"
 gas_budget = "35000000"
 `)
 
