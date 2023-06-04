@@ -40,10 +40,4 @@ func getCoins() {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
 
-	coinObjectIdVar := coinObjectIds[0]
-	coinObjectIdVar2 := coinObjectIds[1]
-
-	fmt.Println("Coin Object IDs array:", coinObjectIds)
-	fmt.Println("Coin Object ID 1 is:", coinObjectIdVar)
-	fmt.Println("Coin Object ID 2 is:", coinObjectIdVar2)
 }
