@@ -54,27 +54,31 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 		return
 	}
 	for _, value := range slice[1:] {
-		fmt.Println("RPC:", config.Default.Rpc)
-		fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
-		fmt.Println("Primary coin:", primaryobj)
-		fmt.Println("Array value to merge:", value)
-		fmt.Println("Gas Budget:", gas)
+		if value != "" {
+			fmt.Println("RPC:", config.Default.Rpc)
+			fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			fmt.Println("Primary coin:", primaryobj)
+			fmt.Println("Array value to merge:", value)
+			fmt.Println("Gas Budget:", gas)
 
-		path := config.Default.SuiBinaryPath
-		primaryCoin := primaryobj
-		coinToMerge := value
-		gasBudget := gas
+			path := config.Default.SuiBinaryPath
+			primaryCoin := primaryobj
+			coinToMerge := value
+			gasBudget := gas
 
-		cmd := exec.Command(path, "client", "merge-coin",
-			"--primary-coin", primaryCoin,
-			"--coin-to-merge", coinToMerge,
-			"--gas-budget="+gasBudget)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
+			cmd := exec.Command(path, "client", "merge-coin",
+				"--primary-coin", primaryCoin,
+				"--coin-to-merge", coinToMerge,
+				"--gas-budget="+gasBudget)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
 
-		runs := cmd.Run()
-		if runs != nil {
-			log.Fatal(runs)
+			runs := cmd.Run()
+			if runs != nil {
+				log.Fatal(runs)
+			}
+		} else {
+			fmt.Println("All coins merged.")
 		}
 	}
 }
