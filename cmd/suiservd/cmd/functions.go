@@ -86,6 +86,8 @@ sui_binary_path = "/home/sui/sui/target/debug/sui"
 address = ""
 gas_odject_to_pay = ""
 primary_coin = ""
+coin_to_merge = ""
+gas_budget = "2000000000"
 `)
 
 	err2 := ioutil.WriteFile(filePath, content, 0644)

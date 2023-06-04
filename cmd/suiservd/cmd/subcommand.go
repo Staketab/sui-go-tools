@@ -30,7 +30,7 @@ var mergecoinCommand = &cobra.Command{
 	Short: "Merging all sui::SUI objects to PRIMARY_COIN",
 	Long:  "Merging all sui::SUI objects to PRIMARY_COIN",
 	Run: func(cmd *cobra.Command, args []string) {
-		mergeCoins()
+		getCoins()
 	},
 }
 

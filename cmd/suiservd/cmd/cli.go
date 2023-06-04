@@ -47,6 +47,10 @@ func readConfig() {
 	fmt.Println("Primary coin:", config.Default.PrimaryCoin)
 }
 
+func fetchPrimaryCoin() {
+
+}
+
 func mergeCoins() {
 	getCoins()
 	config, err := ReadConfigFile(configFilePath)
