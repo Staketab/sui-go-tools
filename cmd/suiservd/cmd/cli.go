@@ -105,7 +105,7 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 			"--module", config.Default.Module,
 			"--function", config.Default.Function,
 			"--args", config.Default.Args,
-			stakesId,
+			value,
 			"--gas-budget="+gasBudget,
 			"--gas", primaryobj,
 			"--json")
