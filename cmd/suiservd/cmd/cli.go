@@ -54,7 +54,6 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 		return
 	}
 	for _, value := range slice[1:] {
-		fmt.Println("Array value to merge:", value)
 		if value != "" {
 			fmt.Println("RPC:", config.Default.Rpc)
 			fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
@@ -78,7 +77,7 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 				log.Fatal(runs)
 			}
 		} else {
-			log.Fatal("All coins merged.")
+			fmt.Println("All coins merged.")
 		}
 	}
 }
@@ -89,8 +88,8 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 		fmt.Println(err)
 		return
 	}
-	for _, value := range slice[1:] {
-		if value != "" {
+	if len(slice) == 1 {
+		for _, value := range slice[1:] {
 			fmt.Println("RPC:", config.Default.Rpc)
 			fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
 			fmt.Println("Primary coin:", primaryobj)
@@ -116,8 +115,8 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 			if runs != nil {
 				log.Fatal(runs)
 			}
-		} else {
-			fmt.Println("All coins merged.")
 		}
+	} else {
+		fmt.Println("All coins merged.")
 	}
 }
