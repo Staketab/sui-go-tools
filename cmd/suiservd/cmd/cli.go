@@ -61,15 +61,53 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 			fmt.Println("Array value to merge:", value)
 			fmt.Println("Gas Budget:", gas)
 
-			path := config.Default.SuiBinaryPath
 			primaryCoin := primaryobj
 			coinToMerge := value
 			gasBudget := gas
 
-			cmd := exec.Command(path, "client", "merge-coin",
+			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "merge-coin",
 				"--primary-coin", primaryCoin,
 				"--coin-to-merge", coinToMerge,
 				"--gas-budget="+gasBudget)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+
+			runs := cmd.Run()
+			if runs != nil {
+				log.Fatal(runs)
+			}
+		} else {
+			fmt.Println("All coins merged.")
+		}
+	}
+}
+
+func withdrawStakes(slice []string, gas, primaryobj string) {
+	config, err := ReadConfigFile(configFilePath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for _, value := range slice[1:] {
+		if value != "" {
+			fmt.Println("RPC:", config.Default.Rpc)
+			fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			fmt.Println("Primary coin:", primaryobj)
+			fmt.Println("Array value to withdraw:", value)
+			fmt.Println("Gas Budget:", gas)
+			fmt.Println("Gas odject to pay:", primaryobj)
+
+			gasBudget := gas
+			stakesId := value
+
+			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "call",
+				"--package", config.Withdraw.Package,
+				"--module", config.Withdraw.Module,
+				"--function", config.Withdraw.Function,
+				"--args", config.Withdraw.Args,
+				stakesId,
+				"--gas-budget="+gasBudget,
+				"--gas", primaryobj)
 			cmd.Stdout = os.Stdout
 			cmd.Stderr = os.Stderr
 
