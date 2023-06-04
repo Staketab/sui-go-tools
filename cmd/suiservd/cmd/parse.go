@@ -2,15 +2,13 @@ package cmd
 
 import (
 	"encoding/json"
-	"fmt"
-	"log"
 )
 
 func getMergeData() {
 	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
-		fmt.Println(err)
+		errorLog.Println(err)
 		return
 	}
 	url := config.Default.Rpc
@@ -27,19 +25,19 @@ func getMergeData() {
 
 	jsonStr, err := sendRequest(url, payload)
 	if err != nil {
-		log.Fatal(err)
+		errorLog.Fatal(err)
 	}
 
 	var result Result
 	err2 := json.Unmarshal([]byte(jsonStr), &result)
 	if err2 != nil {
-		log.Fatal(err2)
+		errorLog.Fatal(err2)
 	}
 	var coinObjectIds []string
 	for _, data := range result.Result.Data {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
-	fmt.Println("Coin Object IDs array:", coinObjectIds)
+	infoLog.Println("Coin Object IDs array:", coinObjectIds)
 	if len(coinObjectIds) != 1 {
 		a := coinObjectIds
 		b := config.Default.GasBudget
@@ -47,7 +45,7 @@ func getMergeData() {
 
 		mergeCoins(a, b, c)
 	} else {
-		fmt.Println("All coins merged.")
+		infoLog.Println("All coins merged.")
 	}
 	// if config.Default.Address == "" {
 
@@ -59,7 +57,7 @@ func getMergeData() {
 func getPayObj() {
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
-		fmt.Println(err)
+		errorLog.Println(err)
 		return
 	}
 	url := config.Default.Rpc
@@ -76,19 +74,19 @@ func getPayObj() {
 
 	jsonStr, err := sendRequest(url, payload)
 	if err != nil {
-		log.Fatal(err)
+		errorLog.Fatal(err)
 	}
 
 	var result Result
 	err2 := json.Unmarshal([]byte(jsonStr), &result)
 	if err2 != nil {
-		log.Fatal(err2)
+		errorLog.Fatal(err2)
 	}
 	var coinObjectIds []string
 	for _, data := range result.Result.Data {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
-	fmt.Println("Coin Object IDs array:", coinObjectIds)
+	infoLog.Println("Coin Object IDs array:", coinObjectIds)
 
 	// if config.Default.Address == "" {
 
@@ -104,7 +102,7 @@ func getWithdrawData(obj string) {
 	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
-		fmt.Println(err)
+		errorLog.Println(err)
 		return
 	}
 	url := config.Default.Rpc
@@ -121,13 +119,13 @@ func getWithdrawData(obj string) {
 
 	jsonStr, err := sendRequest(url, payload)
 	if err != nil {
-		log.Fatal(err)
+		errorLog.Fatal(err)
 	}
 
 	var response Response
 	err2 := json.Unmarshal([]byte(jsonStr), &response)
 	if err2 != nil {
-		log.Fatal(err2)
+		errorLog.Fatal(err2)
 	}
 	var stakedSuiIds []string
 
@@ -136,7 +134,7 @@ func getWithdrawData(obj string) {
 			stakedSuiIds = append(stakedSuiIds, stake.StakedSuiID)
 		}
 	}
-	fmt.Println("Staked Object IDs array:", stakedSuiIds)
+	infoLog.Println("Staked Object IDs array:", stakedSuiIds)
 
 	a := stakedSuiIds
 	b := config.Default.GasBudget

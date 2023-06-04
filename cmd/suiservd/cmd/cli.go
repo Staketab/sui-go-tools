@@ -15,7 +15,7 @@ var RootCmd = &cobra.Command{
 	Long:  "SUI tool to merge-coins, withdraw stakes and others.",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Default behavior when the root command is executed
-		fmt.Println("Welcome to My:", binary)
+		infoLog.Println("Welcome to My:", binary)
 	},
 }
 
@@ -36,15 +36,15 @@ func initConfigFile() {
 func readConfig() {
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
-		fmt.Println(err)
+		errorLog.Println(err)
 		return
 	}
 
-	fmt.Println("RPC:", config.Default.Rpc)
-	fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
-	fmt.Println("Address:", config.Default.Address)
-	fmt.Println("Gas object to pay:", config.Default.GasObjToPay)
-	fmt.Println("Primary coin:", config.Default.PrimaryCoin)
+	infoLog.Println("RPC:", config.Default.Rpc)
+	infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+	infoLog.Println("Address:", config.Default.Address)
+	infoLog.Println("Gas object to pay:", config.Default.GasObjToPay)
+	infoLog.Println("Primary coin:", config.Default.PrimaryCoin)
 }
 
 func mergeCoins(slice []string, gas, primaryobj string) {
@@ -55,11 +55,11 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 	}
 	for _, value := range slice[1:] {
 		if value != "" {
-			fmt.Println("RPC:", config.Default.Rpc)
-			fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
-			fmt.Println("Primary coin:", primaryobj)
-			fmt.Println("Array value to merge:", value)
-			fmt.Println("Gas Budget:", gas)
+			infoLog.Println("RPC:", config.Default.Rpc)
+			infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			infoLog.Println("Primary coin:", primaryobj)
+			infoLog.Println("Array value to merge:", value)
+			infoLog.Println("Gas Budget:", gas)
 
 			primaryCoin := primaryobj
 			coinToMerge := value
@@ -77,7 +77,7 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 				log.Fatal(runs)
 			}
 		} else {
-			fmt.Println("All coins merged.")
+			infoLog.Println("All coins merged.")
 		}
 	}
 }
@@ -89,12 +89,12 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 		return
 	}
 	for _, value := range slice[1:] {
-		fmt.Println("RPC:", config.Default.Rpc)
-		fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
-		fmt.Println("Primary coin:", primaryobj)
-		fmt.Println("Array value to withdraw:", value)
-		fmt.Println("Gas Budget:", gas)
-		fmt.Println("Gas odject to pay:", primaryobj)
+		infoLog.Println("RPC:", config.Default.Rpc)
+		infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+		infoLog.Println("Primary coin:", primaryobj)
+		infoLog.Println("Array value to withdraw:", value)
+		infoLog.Println("Gas Budget:", gas)
+		infoLog.Println("Gas odject to pay:", primaryobj)
 
 		gasBudget := gas
 		stakesId := value

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/spf13/cobra"
 )
@@ -56,10 +55,10 @@ var versionCommand = &cobra.Command{
 
 		jsonData, err := json.Marshal(data)
 		if err != nil {
-			fmt.Println("Error:", err)
+			errorLog.Println("Error:", err)
 			return
 		}
 
-		fmt.Println(string(jsonData))
+		infoLog.Println(string(jsonData))
 	},
 }
