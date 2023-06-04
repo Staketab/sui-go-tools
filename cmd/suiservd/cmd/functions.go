@@ -81,11 +81,11 @@ func createConfigFile(path string) error {
 	}
 	filePath := filepath.Join(usr.HomeDir, path)
 	content := []byte(`[DEFAULT]
-rpc = "https://rpc-testnet.suiscan.xyz:443"
+rpc = "https://rpc-mainnet.suiscan.xyz:443"
 sui_binary_path = "/root/sui/target/debug/sui"
 address = "0x5427ad0ec547c505f5ec466a1a31e21c6b0ea07689ee8a4ee0afd94512da3c10"
-gas_odject_to_pay = "0x4ee24f7c513ae2cabcbeaeb14f4b332047990066b89def6460d8ae047e3a4cbe"
-primary_coin = "0x4ee24f7c513ae2cabcbeaeb14f4b332047990066b89def6460d8ae047e3a4cbe"
+gas_odject_to_pay = ""
+primary_coin = ""
 coins_to_merge = "[]"
 gas_budget = "35000000"
 `)

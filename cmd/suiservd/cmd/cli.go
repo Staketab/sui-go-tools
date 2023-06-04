@@ -54,11 +54,11 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 		return
 	}
 	for _, value := range slice[1:] {
-		fmt.Println(config.Default.Rpc)
-		fmt.Println(config.Default.SuiBinaryPath)
-		fmt.Println(primaryobj)
-		fmt.Println(value)
-		fmt.Println(gas)
+		fmt.Println("RPC:", config.Default.Rpc)
+		fmt.Println("SUI binary path:", config.Default.SuiBinaryPath)
+		fmt.Println("Primary coin:", primaryobj)
+		fmt.Println("Array value to merge:", value)
+		fmt.Println("Gas Budget:", gas)
 
 		path := config.Default.SuiBinaryPath
 		primaryCoin := primaryobj
