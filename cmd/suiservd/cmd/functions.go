@@ -88,7 +88,13 @@ address = "0x5427ad0ec547c505f5ec466a1a31e21c6b0ea07689ee8a4ee0afd94512da3c10"
 gas_odject_to_pay = ""
 primary_coin = ""
 coins_to_merge = "[]"
-gas_budget = "35000000"
+gas_budget = "20000000"
+
+[WITHDRAW]
+package = "0x3"
+module = "sui_system"
+function = "request_withdraw_stake"
+args = "0x5"
 `)
 
 	err2 := ioutil.WriteFile(filePath, content, 0644)
