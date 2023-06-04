@@ -51,9 +51,9 @@ func isRpcWorking() {
 	statusCode := response.StatusCode
 
 	if statusCode == 200 {
-		fmt.Println("RPC is working:", statusCode)
+		fmt.Println("RPC is working, status code:", statusCode)
 	} else {
-		fmt.Println("RPC is not working:", statusCode)
+		fmt.Println("RPC is not working, status code:", statusCode)
 		log.Fatal("Exit...", statusCode)
 	}
 }
