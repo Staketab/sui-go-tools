@@ -41,7 +41,12 @@ func getCoins() {
 	if err2 != nil {
 		log.Fatal(err2)
 	}
+	var coinObjectIds []string
+	for _, data := range result.Result.Data {
+		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
+	}
 
+	fmt.Println("Coin Object IDs array:", coinObjectIds)
 	coinObjectIdVar := result.Result.Data[0].CoinObjectId
 
 	fmt.Println("Coin Object ID is:", coinObjectIdVar)
