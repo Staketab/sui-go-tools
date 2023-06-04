@@ -89,7 +89,7 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 		fmt.Println(err)
 		return
 	}
-	for _, value := range slice[1:] {
+	for _, value := range slice[0:] {
 		infoLog.Println("RPC:", config.Default.Rpc)
 		infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
 		infoLog.Println("Primary coin:", primaryobj)
@@ -105,7 +105,7 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 			"--module", config.Default.Module,
 			"--function", config.Default.Function,
 			"--args", config.Default.Args,
-			value,
+			stakesId,
 			"--gas-budget="+gasBudget,
 			"--gas", primaryobj,
 			"--json")
