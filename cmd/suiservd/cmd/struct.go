@@ -10,7 +10,7 @@ type DefaultConfig struct {
 	Address       string `toml:"address"`
 	GasObjToPay   string `toml:"gas_odject_to_pay"`
 	PrimaryCoin   string `toml:"primary_coin"`
-	CoinToMerge   string `toml:"coin_to_merge"`
+	CoinToMerge   string `toml:"coins_to_merge"`
 	GasBudget     string `toml:"gas_budget"`
 }
 

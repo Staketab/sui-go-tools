@@ -67,13 +67,12 @@ func mergeCoins(slice []string, payobj, gas, primaryobj string) {
 		primaryCoin := primaryobj
 		coinToMerge := value
 		gasBudget := gas
-		gasObjectToPay := payobj
+		// gasObjectToPay := payobj
 
 		cmd := exec.Command(path, "client", "merge-coin",
 			"--primary-coin", primaryCoin,
 			"--coin-to-merge", coinToMerge,
-			"--gas-budget="+gasBudget,
-			"--gas", gasObjectToPay)
+			"--gas-budget="+gasBudget)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 

@@ -41,6 +41,11 @@ func getCoins() {
 	}
 	fmt.Println("Coin Object IDs array:", coinObjectIds)
 
+	// if config.Default.Address == "" {
+
+	// } else {
+
+	// }
 	a := coinObjectIds
 	b := coinObjectIds[0]
 	c := config.Default.GasBudget
