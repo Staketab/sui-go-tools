@@ -45,7 +45,6 @@ func getPayObj() {
 }
 
 func getWithdrawData(obj string) {
-	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		errorLog.Println(err)
