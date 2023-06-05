@@ -7,6 +7,7 @@ import (
 func init() {
 	RootCmd.AddCommand(initCommand)
 	RootCmd.AddCommand(mergecoinCommand)
+	RootCmd.AddCommand(mergecoinsCommand)
 	RootCmd.AddCommand(withdrawCommand)
 	RootCmd.AddCommand(versionCommand)
 }
@@ -23,6 +24,15 @@ var initCommand = &cobra.Command{
 }
 
 var mergecoinCommand = &cobra.Command{
+	Use:   "merge",
+	Short: "Merging all sui::SUI objects to PRIMARY_COIN",
+	Long:  "Merging all sui::SUI objects to PRIMARY_COIN",
+	Run: func(cmd *cobra.Command, args []string) {
+
+	},
+}
+
+var mergecoinsCommand = &cobra.Command{
 	Use:   "merge-all",
 	Short: "Merging all sui::SUI objects to PRIMARY_COIN",
 	Long:  "Merging all sui::SUI objects to PRIMARY_COIN",
