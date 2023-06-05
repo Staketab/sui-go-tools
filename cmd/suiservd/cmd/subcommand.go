@@ -23,7 +23,7 @@ var initCommand = &cobra.Command{
 }
 
 var mergecoinCommand = &cobra.Command{
-	Use:   "merge-coins",
+	Use:   "merge-all",
 	Short: "Merging all sui::SUI objects to PRIMARY_COIN",
 	Long:  "Merging all sui::SUI objects to PRIMARY_COIN",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -32,7 +32,7 @@ var mergecoinCommand = &cobra.Command{
 }
 
 var withdrawCommand = &cobra.Command{
-	Use:   "withdraw",
+	Use:   "withdraw-all",
 	Short: "Withdrawing all sui::SuiStaked objects",
 	Long:  "Withdrawing all sui::SuiStaked objects",
 	Run: func(cmd *cobra.Command, args []string) {
