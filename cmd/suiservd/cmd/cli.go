@@ -72,13 +72,35 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 				"--gas-budget="+gasBudget,
 				"--json")
 
-			cmd.Stdout = os.Stdout
+			cmd.Stdout = nil
+			cmd.Stderr = nil
+
+			outputFile := "output.txt"
+			file, err := os.Create(configPath + outputFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer file.Close()
+
+			cmd.Stdout = file
 			cmd.Stderr = os.Stderr
 
-			runs := cmd.Run()
-			if runs != nil {
-				log.Fatal(runs)
+			err = cmd.Run()
+			if err != nil {
+				log.Fatal(err)
 			}
+
+			outputBytes, err := os.ReadFile(configPath + outputFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			var result MergeResponse
+			err = json.Unmarshal(outputBytes, &result)
+			if err != nil {
+				log.Fatal(err)
+			}
+			log.Println("TX Status:", result.Effects.Status.Status)
 		} else {
 			infoLog.Println("All coins merged.")
 		}
@@ -111,34 +133,13 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 			"--gas-budget="+gasBudget,
 			"--gas", primaryobj,
 			"--json")
-		cmd.Stdout = nil
-		cmd.Stderr = nil
 
-		outputFile := "output.txt"
-		file, err := os.Create(configPath + outputFile)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer file.Close()
-
-		cmd.Stdout = file
+		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 
-		err = cmd.Run()
-		if err != nil {
-			log.Fatal(err)
+		runs := cmd.Run()
+		if runs != nil {
+			log.Fatal(runs)
 		}
-
-		outputBytes, err := os.ReadFile(outputFile)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		var result MergeResponse
-		err = json.Unmarshal(outputBytes, &result)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Println("TX Status:", result.Effects.Status.Status)
 	}
 }
