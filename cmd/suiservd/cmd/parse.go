@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -18,7 +19,7 @@ func getVersion() {
 		return
 	}
 
-	infoLog.Println(string(jsonData))
+	fmt.Println(string(jsonData))
 }
 
 func getMergeData() {
