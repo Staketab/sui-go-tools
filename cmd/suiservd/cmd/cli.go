@@ -85,11 +85,6 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 			cmd.Stdout = file
 			cmd.Stderr = os.Stderr
 
-			err = cmd.Run()
-			if err != nil {
-				log.Fatal(err)
-			}
-
 			outputBytes, err := os.ReadFile(configPath + outputFile)
 			if err != nil {
 				log.Fatal(err)
