@@ -72,8 +72,7 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 				"--gas-budget="+gasBudget,
 				"--json")
 
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
+			cmd.Stdout = nil
 
 			outputFile := "output.txt"
 			file, err := os.Create(configPath + outputFile)
@@ -83,7 +82,7 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 			defer file.Close()
 
 			cmd.Stdout = file
-			cmd.Stderr = file
+			cmd.Stderr = os.Stderr
 
 			err = cmd.Run()
 			if err != nil {
