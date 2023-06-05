@@ -73,13 +73,16 @@ func getWithdrawData(obj string) {
 	if err2 != nil {
 		errorLog.Fatal(err2)
 	}
-	var stakedSuiIds []string
 
+	var stakedSuiIds []string
 	for _, result := range response.Result {
 		for _, stake := range result.Stakes {
-			stakedSuiIds = append(stakedSuiIds, stake.StakedSuiID)
+			if stake.Status != "Pending" {
+				stakedSuiIds = append(stakedSuiIds, stake.StakedSuiID)
+			}
 		}
 	}
+
 	if len(stakedSuiIds) != 0 {
 		stakedLen := len(stakedSuiIds)
 		infoLog.Println("Found", stakedLen, "Staked object IDs array:", stakedSuiIds)
@@ -90,6 +93,7 @@ func getWithdrawData(obj string) {
 		time.Sleep(2 * time.Second)
 		withdrawStakes(a, b, c)
 	} else {
-		infoLog.Println("No Staked object IDs found for withdraw.")
+		infoLog.Println("No Staked object IDs found for withdrawal.")
 	}
+
 }
