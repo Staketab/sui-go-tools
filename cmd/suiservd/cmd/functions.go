@@ -9,6 +9,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+	"time"
 
 	toml "github.com/pelletier/go-toml"
 )
@@ -51,6 +52,7 @@ func isRpcWorking() {
 
 	if statusCode == 200 {
 		infoLog.Println("RPC is working, status code:", statusCode)
+		time.Sleep(2 * time.Second)
 	} else {
 		infoLog.Println("RPC is not working, status code:", statusCode)
 		errorLog.Fatal("Exit...", statusCode)

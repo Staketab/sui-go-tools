@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"encoding/json"
+	"time"
 )
 
 func getMergeData() {
@@ -37,11 +38,13 @@ func getMergeData() {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
 	infoLog.Println("Coin Object IDs array:", coinObjectIds)
+
 	if len(coinObjectIds) != 1 {
 		a := coinObjectIds
 		b := config.Default.GasBudget
 		c := coinObjectIds[0]
 
+		time.Sleep(2 * time.Second)
 		mergeCoins(a, b, c)
 	} else {
 		infoLog.Println("No coins objects found for merge.")
@@ -125,11 +128,12 @@ func getWithdrawData(obj string) {
 	}
 	if len(stakedSuiIds) != 0 {
 		stakedLen := len(stakedSuiIds)
-		infoLog.Println("Found", stakedLen, "Staked object IDs")
+		infoLog.Println("Found", stakedLen, "Staked object IDs array:", stakedSuiIds)
 		a := stakedSuiIds
 		b := config.Default.GasBudget
 		c := obj
 
+		time.Sleep(2 * time.Second)
 		withdrawStakes(a, b, c)
 	} else {
 		infoLog.Println("No Staked object IDs found for withdraw.")
