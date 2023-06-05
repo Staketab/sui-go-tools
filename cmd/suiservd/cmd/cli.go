@@ -99,7 +99,9 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			log.Println("TX Status:", result.Effects.Status.Status)
+			infoLog.Println("--------------------")
+			infoLog.Println("TX Status:", result.Effects.Status.Status)
+			infoLog.Println("--------------------")
 		} else {
 			infoLog.Println("All coins merged.")
 		}
