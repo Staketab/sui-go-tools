@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -43,7 +44,7 @@ func isRpcWorking() {
 	}
 	defer response.Body.Close()
 
-	_, err = ioutil.ReadAll(response.Body)
+	_, err = io.ReadAll(response.Body)
 	if err != nil {
 		errorLog.Fatal(err)
 	}
@@ -96,7 +97,7 @@ function = "request_withdraw_stake"
 args = "0x5"
 `)
 
-	err2 := ioutil.WriteFile(filePath, content, 0644)
+	err2 := os.WriteFile(filePath, content, 0644)
 	if err2 != nil {
 		return fmt.Errorf("failed to create config file: %s", err)
 	}

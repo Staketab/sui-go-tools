@@ -6,6 +6,7 @@ import (
 )
 
 func getMergeData() {
+	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		errorLog.Println(err)
