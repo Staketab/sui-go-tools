@@ -74,17 +74,22 @@ func getWithdrawData(obj string) {
 	}
 
 	var stakedSuiIds []string
+	var pendingCount, nonPendingCount int
+
 	for _, result := range response.Result {
 		for _, stake := range result.Stakes {
-			if stake.Status != "Pending" {
+			if stake.Status == "Pending" {
+				pendingCount++
+			} else {
 				stakedSuiIds = append(stakedSuiIds, stake.StakedSuiID)
+				nonPendingCount++
 			}
 		}
 	}
 
-	if len(stakedSuiIds) != 0 {
-		stakedLen := len(stakedSuiIds)
-		infoLog.Println("Found", stakedLen, "Staked object IDs array:", stakedSuiIds)
+	if nonPendingCount != 0 {
+		infoLog.Println("Found", nonPendingCount, "non-pending Staked object IDs:", stakedSuiIds)
+		infoLog.Println("Pending staked object IDs count:", pendingCount)
 		a := stakedSuiIds
 		b := config.Default.GasBudget
 		c := obj
@@ -92,7 +97,7 @@ func getWithdrawData(obj string) {
 		time.Sleep(2 * time.Second)
 		withdrawStakes(a, b, c)
 	} else {
-		infoLog.Println("No Staked object IDs found for withdrawal.")
+		infoLog.Println("No non-pending Staked object IDs found for withdrawal.")
+		infoLog.Println("Pending staked object IDs count:", pendingCount)
 	}
-
 }
