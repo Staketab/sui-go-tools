@@ -5,6 +5,22 @@ import (
 	"time"
 )
 
+func getVersion() {
+	data := struct {
+		Version string `json:"version"`
+	}{
+		Version: version,
+	}
+
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		errorLog.Println("Error:", err)
+		return
+	}
+
+	infoLog.Println(string(jsonData))
+}
+
 func getMergeData() {
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {

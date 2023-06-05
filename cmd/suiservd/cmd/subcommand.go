@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"encoding/json"
-
 	"github.com/spf13/cobra"
 )
 
@@ -47,18 +45,6 @@ var versionCommand = &cobra.Command{
 	Short: "Print the CLI version",
 	Long:  "Print the CLI version",
 	Run: func(cmd *cobra.Command, args []string) {
-		data := struct {
-			Version string `json:"version"`
-		}{
-			Version: version,
-		}
-
-		jsonData, err := json.Marshal(data)
-		if err != nil {
-			errorLog.Println("Error:", err)
-			return
-		}
-
-		infoLog.Println(string(jsonData))
+		getVersion()
 	},
 }
