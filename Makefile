@@ -1,15 +1,15 @@
-DAEMON_NAME = sui-tool
+DAEMON_NAME = suiservd
 BUILD_FLAGS :=
 
 all: go.sum build install
 
 install: go.sum
-	@echo "--> Installing sui-tool"
+	@echo "--> Installing suiservd sui-tool"
 	go mod tidy
 	go install $(BUILD_FLAGS) ./cmd/$(DAEMON_NAME)
 
 build: go.sum
-	@echo "--> Building sui-tool"
+	@echo "--> Building suiservd sui-tool"
 	go mod tidy
 	go build $(BUILD_FLAGS) -o ./build/$(DAEMON_NAME) ./cmd/$(DAEMON_NAME)
 

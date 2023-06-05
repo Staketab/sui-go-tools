@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	cmd "github.com/staketab/sui-go-tools/cmd/sui-tool/cmd"
+	cmd "github.com/staketab/sui-go-tools/cmd/suiservd/cmd"
 )
 
 func main() {
