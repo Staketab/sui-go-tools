@@ -5,7 +5,6 @@ import (
 )
 
 func getMergeData() {
-	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		errorLog.Println(err)
@@ -50,6 +49,7 @@ func getMergeData() {
 }
 
 func getPayObj() {
+	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		errorLog.Println(err)
@@ -81,7 +81,6 @@ func getPayObj() {
 	for _, data := range result.Result.Data {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
-	infoLog.Println("Coin Object IDs array:", coinObjectIds)
 
 	a := coinObjectIds[0]
 
