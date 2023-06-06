@@ -18,7 +18,7 @@ jobs:
           go-version: '1.16'
 
       - name: Build Go Binary
-        run: go build -o suid .
+        run: go build -o ./build/suid ./cmd/suid
 
       - name: Set up Git environment
         run: |
