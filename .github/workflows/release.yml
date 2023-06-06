@@ -1,0 +1,61 @@
+name: Create Release and Tag
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_release_and_tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
+      - name: Build Go Binary
+        run: go build -o ./build/suid ./cmd/suid
+
+      - name: Set up Git environment
+        run: |
+          git config --local user.email "support@staketab.com"
+          git config --local user.name "Staketab"
+
+      - name: Set Release Variables
+        id: env_vars
+        run: |
+          tag_name=$(grep -oE 'tag_name\s+=\s+"([^"]+)"' ./releases | awk -F'"' '{print $2}')
+          release_name=$(grep -oE 'release_name\s+=\s+"([^"]+)"' ./releases | awk -F'"' '{print $2}')
+          body=$(grep -oE 'body\s+=\s+"([^"]+)"' ./releases | awk -F'"' '{print $2}')
+          echo "TAG_NAME=$tag_name" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
+          echo "RELEASE_BODY=$body" >> $GITHUB_ENV
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
+          body: ${{ env.RELEASE_BODY }}
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/suid
+          asset_name: suid
+          asset_content_type: application/octet-stream
+
+      - name: Create Tag
+        run: |
+          git tag ${{ env.TAG_NAME }}
+          git push origin ${{ env.TAG_NAME }}
