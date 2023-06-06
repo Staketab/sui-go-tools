@@ -13,6 +13,7 @@ func init() {
 Flags:
   -p, --primary-coin string   The primary coin for merging, in 20 bytes Hex string
   -c, --coin-to-merge string   Coin to be merged, in 20 bytes Hex string
+
 `)
 
 	RootCmd.AddCommand(initCommand)
