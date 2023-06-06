@@ -4,13 +4,13 @@
   gather_facts: false
 
   vars:
-    deployment_artifact: ../build/suiservd
-    deployment_name: suiservd
-    deployment_snarked: ../scripts/snarked.sh
-    deployment_staged: ../scripts/staged.sh
-    deployment_workdir: /opt/suiservd
-    deployment_ledgers_workdir: /opt/suiservd
-    deployment_service: suiservd
+    deployment_artifact: ../build/suid
+    deployment_name: suid
+    deployment_snarked:
+    deployment_staged:
+    deployment_workdir: /opt/suid
+    deployment_ledgers_workdir: /opt/suid
+    deployment_service: suid
 
   roles:
   - staketab.ledgers-deployment

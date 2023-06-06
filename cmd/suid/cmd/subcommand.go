@@ -6,13 +6,13 @@ import (
 
 func init() {
 	mergeCoinCommand.Flags().StringP("primary-coin", "p", "", "The primary coin for merging, in 20 bytes Hex string")
-	mergeCoinCommand.Flags().StringSliceP("coin-to-merge", "c", []string{}, "Coin to be merged, in 20 bytes Hex string")
+	mergeCoinCommand.Flags().StringSliceP("coins-to-merge", "c", []string{}, "Coin to be merged, in 20 bytes Hex string")
 	mergeCoinCommand.SetUsageTemplate(`Usage:
   merge [flags]
 
 Flags:
   -p, --primary-coin string   The primary coin for merging, in 20 bytes Hex string
-  -c, --coin-to-merge string   Coin to be merged, in 20 bytes Hex string
+  -c, --coins-to-merge string, array   Coins to be merged, in 20 bytes Hex string
 
 `)
 
@@ -36,13 +36,12 @@ var initCommand = &cobra.Command{
 
 var mergeCoinCommand = &cobra.Command{
 	Use:   "merge",
-	Short: "Merge sui::SUI object to PRIMARY_COIN",
-	Long:  "Merge sui::SUI object to PRIMARY_COIN",
+	Short: "Merge sui::SUI objects to PRIMARY_COIN",
+	Long:  "Merge sui::SUI objects to PRIMARY_COIN",
 	Run: func(cmd *cobra.Command, args []string) {
 		primaryCoin, _ := cmd.Flags().GetString("primary-coin")
-		coinsToMerge, _ := cmd.Flags().GetStringSlice("coin-to-merge")
+		coinsToMerge, _ := cmd.Flags().GetStringSlice("coins-to-merge")
 
-		// Вызов вашей функции с передачей аргументов
 		mergeCoin(coinsToMerge, primaryCoin)
 	},
 }

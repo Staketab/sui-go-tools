@@ -16,7 +16,7 @@ var RootCmd = &cobra.Command{
 	Long:  "SUI tool to merge-coins, withdraw stakes and others.",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Default behavior when the root command is executed
-		infoLog.Println("Welcome to My:", binary)
+		infoLog.Println("Welcome to:", binary)
 	},
 }
 
