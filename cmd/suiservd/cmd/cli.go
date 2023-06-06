@@ -47,13 +47,13 @@ func readConfig() {
 	infoLog.Println("Gas object to pay:", config.Default.GasObjToPay)
 	infoLog.Println("Primary coin:", config.Default.PrimaryCoin)
 }
-func mergeCoin(slice []string, gas, primaryobj string) {
+func mergeCoin(slice []string, primaryobj string) {
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	for _, value := range slice[0:] {
+	for _, value := range slice {
 		if value != "" {
 			primaryCoin := primaryobj
 			coinToMerge := value

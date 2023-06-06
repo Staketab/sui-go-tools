@@ -41,10 +41,9 @@ var mergeCoinCommand = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		primaryCoin, _ := cmd.Flags().GetString("primary-coin")
 		coinsToMerge, _ := cmd.Flags().GetStringSlice("coin-to-merge")
-		gas, _ := cmd.Flags().GetString("gas")
 
 		// Вызов вашей функции с передачей аргументов
-		mergeCoin(coinsToMerge, gas, primaryCoin)
+		mergeCoin(coinsToMerge, primaryCoin)
 	},
 }
 
