@@ -38,7 +38,7 @@ Flags:
 ```
 
 ## 1. Init config:
-This command will create a config along the path /home/USER/.sui-config/config.toml
+This command will create a config along the path `/home/USER/.sui-config/config.toml`
 ```
 suid init
 ```
