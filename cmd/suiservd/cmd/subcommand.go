@@ -7,14 +7,13 @@ import (
 func init() {
 	mergeCoinCommand.Flags().StringP("primary-coin", "p", "", "The primary coin for merging, in 20 bytes Hex string")
 	mergeCoinCommand.Flags().StringSliceP("coin-to-merge", "c", []string{}, "Coin to be merged, in 20 bytes Hex string")
-
-	// Set the usage description for the command
 	mergeCoinCommand.SetUsageTemplate(`Usage:
   merge [flags]
 
 Flags:
   -p, --primary-coin string   The primary coin for merging, in 20 bytes Hex string
-  -c, --coin-to-merge string   Coin to be merged, in 20 bytes Hex string`)
+  -c, --coin-to-merge string   Coin to be merged, in 20 bytes Hex string
+`)
 
 	RootCmd.AddCommand(initCommand)
 	RootCmd.AddCommand(mergeCoinCommand)
