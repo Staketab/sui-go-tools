@@ -19,12 +19,9 @@ jobs:
 
       - name: Set Release Variables
         run: |
-          tag_name=$(grep -oE 'tag_name\s+=\s+"([^"]+)"' releases | awk -F'"' '{print $2}')
-          release_name=$(grep -oE 'release_name\s+=\s+"([^"]+)"' releases | awk -F'"' '{print $2}')
-          body=$(grep -oE 'body\s+=\s+"([^"]+)"' releases | awk -F'"' '{print $2}')
-          echo "::set-env name=TAG_NAME::$tag_name"
-          echo "::set-env name=RELEASE_NAME::$release_name"
-          echo "::set-env name=BODY::$body"
+          echo "TAG_NAME=$(grep -oE 'tag_name\s+=\s+\"([^\"]+)\"' releases | awk -F'\"' '{print \$2}')" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$(grep -oE 'release_name\s+=\s+\"([^\"]+)\"' releases | awk -F'\"' '{print \$2}')" >> $GITHUB_ENV
+          echo "RELEASE_BODY=$(grep -oE 'body\s+=\s+\"([^\"]+)\"' releases | awk -F'\"' '{print \$2}')" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
@@ -34,7 +31,7 @@ jobs:
         with:
           tag_name: ${{ env.TAG_NAME }}
           release_name: ${{ env.RELEASE_NAME }}
-          body: ${{ env.BODY }}
+          body: ${{ env.RELEASE_BODY }}
 
       - name: Create Tag
         run: |
