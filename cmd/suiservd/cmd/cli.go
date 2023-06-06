@@ -71,7 +71,6 @@ func mergeCoin(slice []string, gas, primaryobj string) {
 				"--primary-coin", primaryCoin,
 				"--coin-to-merge", coinToMerge,
 				"--gas-budget="+gasBudget,
-				"--gas", gasId,
 				"--json")
 
 			cmd.Stdout = nil
