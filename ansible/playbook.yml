@@ -7,8 +7,7 @@
     deployment_artifact: ../build/suid
     deployment_name: suid
     deployment_workdir: /opt/suid
-    deployment_ledgers_workdir: /opt/suid
     deployment_service: suid
 
   roles:
-  - staketab.suid
+  - staketab.suid-deployment
