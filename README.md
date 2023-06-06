@@ -37,7 +37,7 @@ Flags:
   -h, --help   help for suid
 ```
 
-## 1. Init config
+## 1. Init config:
 This command will create a config along the path /home/USER/.sui-config/config.toml
 ```
 suid init
@@ -59,7 +59,7 @@ Specify the in the config:
 - SUI binary PATH `sui_binary_path = "/home/USER/target/debug/sui"`
 - Your address `address = ""`
 
-## 2. Merge
+## 2. Merge:
 ```
 Merge sui::SUI objects to PRIMARY_COIN
 
@@ -75,12 +75,12 @@ Use one sui::SUI object in `--coins-to-merge` or several separated by commas.
 suid merge --primary-coin 0x0743d13c6b0cc38aa6f2241b9c33f173200a5166be2df3eaf636775cd39bec33 --coins-to-merge 0x08fe065cc37c0394fe8d4320389b0016c2b903888af656b1e998d68a8dec56eb,0x0c466a8adc360dd4c596cfc190d59f02354b295c54048d75374e38dff7810f64
 ```
 
-## 3. Merge All
+## 3. Merge All:
 Merging all sui::SUI objects to Primary coin automatically.
 ```
 suid merge-all
 ```
-## 4. Withdraw All
+## 4. Withdraw All:
 Withdrawing all sui::SuiStaked objects automatically.
 ```
 suid withdraw-all
