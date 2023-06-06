@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func getMergeData() {
+func getMergeAll() {
 	isRpcWorking()
 	config, err := ReadConfigFile(configFilePath)
 	if err != nil {

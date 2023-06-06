@@ -5,6 +5,19 @@ import (
 )
 
 func init() {
+	mergecoinCommand.Flags().StringP("primary-coin", "p", "", "The primary coin for merging, in 20 bytes Hex string")
+	mergecoinCommand.Flags().StringSliceP("coin-to-merge", "c", []string{}, "Coin to be merged, in 20 bytes Hex string")
+	mergecoinCommand.Flags().StringP("gas", "g", "", "ID of the gas object for gas payment")
+
+	// Set the usage description for the command
+	mergecoinCommand.SetUsageTemplate(`Usage:
+  merge [flags]
+
+Flags:
+  -p, --primary-coin string   The primary coin for merging, in 20 bytes Hex string
+  -c, --coin-to-merge string   Coin to be merged, in 20 bytes Hex string
+      --gas string    ID of the gas object for gas payment`)
+
 	RootCmd.AddCommand(initCommand)
 	RootCmd.AddCommand(mergecoinCommand)
 	RootCmd.AddCommand(mergecoinsCommand)
@@ -28,7 +41,12 @@ var mergecoinCommand = &cobra.Command{
 	Short: "Merging all sui::SUI objects to PRIMARY_COIN",
 	Long:  "Merging all sui::SUI objects to PRIMARY_COIN",
 	Run: func(cmd *cobra.Command, args []string) {
+		primaryCoin, _ := cmd.Flags().GetString("primary-coin")
+		coinsToMerge, _ := cmd.Flags().GetStringSlice("coin-to-merge")
+		gas, _ := cmd.Flags().GetString("gas")
 
+		// Вызов вашей функции с передачей аргументов
+		mergeCoin(coinsToMerge, gas, primaryCoin)
 	},
 }
 
@@ -37,7 +55,7 @@ var mergecoinsCommand = &cobra.Command{
 	Short: "Merging all sui::SUI objects to PRIMARY_COIN",
 	Long:  "Merging all sui::SUI objects to PRIMARY_COIN",
 	Run: func(cmd *cobra.Command, args []string) {
-		getMergeData()
+		getMergeAll()
 	},
 }
 

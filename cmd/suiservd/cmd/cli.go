@@ -47,6 +47,67 @@ func readConfig() {
 	infoLog.Println("Gas object to pay:", config.Default.GasObjToPay)
 	infoLog.Println("Primary coin:", config.Default.PrimaryCoin)
 }
+func mergeCoin(slice []string, gas, primaryobj string) {
+	config, err := ReadConfigFile(configFilePath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for _, value := range slice[0:] {
+		if value != "" {
+			infoLog.Println("RPC:", config.Default.Rpc)
+			infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			infoLog.Println("Primary coin:", primaryobj)
+			infoLog.Println("Array value to merge:", value)
+			infoLog.Println("Gas Budget:", gas)
+
+			primaryCoin := primaryobj
+			coinToMerge := value
+			gasId := gas
+			gasBudget := config.Default.GasBudget
+
+			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "merge-coin",
+				"--primary-coin", primaryCoin,
+				"--coin-to-merge", coinToMerge,
+				"--gas-budget="+gasBudget,
+				"--gas", gasId,
+				"--json")
+
+			cmd.Stdout = nil
+
+			outputFile := "output.txt"
+			file, err := os.Create(configPath + outputFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer file.Close()
+
+			cmd.Stdout = file
+			cmd.Stderr = os.Stderr
+
+			err = cmd.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			outputBytes, err := os.ReadFile(configPath + outputFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			var result MergeResponse
+			err = json.Unmarshal(outputBytes, &result)
+			if err != nil {
+				log.Fatal(err)
+			}
+			infoLog.Println("--------------------")
+			infoLog.Println("TX Status:", result.Effects.Status.Status)
+			infoLog.Println("--------------------")
+		} else {
+			infoLog.Println("Coin ID merged.")
+		}
+	}
+}
 
 func mergeCoins(slice []string, gas, primaryobj string) {
 	config, err := ReadConfigFile(configFilePath)
