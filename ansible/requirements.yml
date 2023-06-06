@@ -1,5 +1,5 @@
 ---
 roles:
-- name: staketab.suid-deployment
+- name: staketab.suid
   src: https://github.com/Staketab/ansible-ledgers-deploy
 
