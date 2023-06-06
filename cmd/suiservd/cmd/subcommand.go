@@ -16,7 +16,7 @@ func init() {
 Flags:
   -p, --primary-coin string   The primary coin for merging, in 20 bytes Hex string
   -c, --coin-to-merge string   Coin to be merged, in 20 bytes Hex string
-      --gas string    ID of the gas object for gas payment`)
+  -g, --gas string    ID of the gas object for gas payment`)
 
 	RootCmd.AddCommand(initCommand)
 	RootCmd.AddCommand(mergecoinCommand)
@@ -38,8 +38,8 @@ var initCommand = &cobra.Command{
 
 var mergecoinCommand = &cobra.Command{
 	Use:   "merge",
-	Short: "Merging all sui::SUI objects to PRIMARY_COIN",
-	Long:  "Merging all sui::SUI objects to PRIMARY_COIN",
+	Short: "Merge sui::SUI object to PRIMARY_COIN",
+	Long:  "Merge sui::SUI object to PRIMARY_COIN",
 	Run: func(cmd *cobra.Command, args []string) {
 		primaryCoin, _ := cmd.Flags().GetString("primary-coin")
 		coinsToMerge, _ := cmd.Flags().GetStringSlice("coin-to-merge")
