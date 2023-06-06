@@ -1,6 +1,6 @@
-tag_name="v1.0.0"
-release_name="Release of suid SUI tool v1.0.0"
-body="Available Commands:
+tag_name = "v1.0.0"
+release_name = "Release of suid SUI tool v1.0.0"
+body = "Available Commands:
         help         Help about any command
         init         Initialize config
         merge        Merge sui::SUI objects to PRIMARY_COIN
