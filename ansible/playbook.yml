@@ -11,4 +11,4 @@
     deployment_service: suid
 
   roles:
-  - staketab.suid-deployment
+  - staketab.suid
