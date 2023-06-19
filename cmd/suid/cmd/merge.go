@@ -2,12 +2,20 @@ package cmd
 
 import (
 	"encoding/json"
+	"fmt"
+	"os/user"
+	"path/filepath"
 	"time"
 )
 
 func getMergeAll() {
 	isRpcWorking()
-	config, err := ReadConfigFile(configFilePath)
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Errorf("failed to get current user: %s", err)
+	}
+	filePath := filepath.Join(usr.HomeDir, configFilePath)
+	config, err := ReadConfigFile(filePath)
 	if err != nil {
 		errorLog.Println(err)
 		return
