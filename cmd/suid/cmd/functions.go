@@ -17,7 +17,12 @@ import (
 
 func isRpcWorking() {
 	infoLog.Println("Start checking RPC status.")
-	config, err := ReadConfigFile(configFilePath)
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Errorf("failed to get current user: %s", err)
+	}
+	filePath := filepath.Join(usr.HomeDir, configFilePath)
+	config, err := ReadConfigFile(filePath)
 	if err != nil {
 		errorLog.Println(err)
 		return
