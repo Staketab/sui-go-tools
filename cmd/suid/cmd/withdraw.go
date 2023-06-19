@@ -2,12 +2,20 @@ package cmd
 
 import (
 	"encoding/json"
+	"fmt"
+	"os/user"
+	"path/filepath"
 	"time"
 )
 
 func getPayObj() {
 	isRpcWorking()
-	config, err := ReadConfigFile(configFilePath)
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Errorf("failed to get current user: %s", err)
+	}
+	filePath := filepath.Join(usr.HomeDir, configFilePath)
+	config, err := ReadConfigFile(filePath)
 	if err != nil {
 		errorLog.Println(err)
 		return
@@ -44,11 +52,16 @@ func getPayObj() {
 	getWithdrawData(a)
 }
 
-func getWithdrawData(obj string) {
-	config, err := ReadConfigFile(configFilePath)
+func getWithdrawData(obj string) error {
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Errorf("failed to get current user: %s", err)
+	}
+	filePath := filepath.Join(usr.HomeDir, configFilePath)
+	config, err := ReadConfigFile(filePath)
 	if err != nil {
 		errorLog.Println(err)
-		return
+		return nil
 	}
 	url := config.Default.Rpc
 	addr := config.Default.Address
@@ -100,4 +113,5 @@ func getWithdrawData(obj string) {
 		infoLog.Println("No non-pending Staked object IDs found for withdrawal.")
 		infoLog.Println("Pending staked object IDs count:", pendingCount)
 	}
+	return nil
 }
