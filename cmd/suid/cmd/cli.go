@@ -110,7 +110,12 @@ func mergeCoin(slice []string, primaryobj string) {
 }
 
 func mergeCoins(slice []string, gas, primaryobj string) {
-	config, err := ReadConfigFile(configFilePath)
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Errorf("failed to get current user: %s", err)
+	}
+	filePath := filepath.Join(usr.HomeDir, configFilePath)
+	config, err := ReadConfigFile(filePath)
 	if err != nil {
 		fmt.Println(err)
 		return
