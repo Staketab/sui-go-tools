@@ -141,7 +141,8 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 			cmd.Stdout = nil
 
 			outputFile := "output.txt"
-			file, err := os.Create(configPath + outputFile)
+			filePathOutput := filepath.Join(usr.HomeDir, configPath, outputFile)
+			file, err := os.Create(filePathOutput)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -155,7 +156,7 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 				log.Fatal(err)
 			}
 
-			outputBytes, err := os.ReadFile(configPath + outputFile)
+			outputBytes, err := os.ReadFile(filePathOutput)
 			if err != nil {
 				log.Fatal(err)
 			}
