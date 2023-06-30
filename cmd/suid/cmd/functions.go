@@ -91,7 +91,7 @@ func createConfigFile(path string) error {
 	content := []byte(`[DEFAULT]
 rpc = "https://rpc-mainnet.suiscan.xyz:443"
 sui_binary_path = "/root/sui/target/debug/sui"
-address = "0x5427ad0ec547c505f5ec466a1a31e21c6b0ea07689ee8a4ee0afd94512da3c10"
+address = ""
 gas_budget = "20000000"
 package = "0x3"
 module = "sui_system"

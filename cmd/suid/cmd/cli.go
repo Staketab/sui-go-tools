@@ -187,32 +187,99 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 		return
 	}
 	for _, value := range slice[0:] {
-		infoLog.Println("RPC:", config.Default.Rpc)
-		infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
-		infoLog.Println("Primary coin:", primaryobj)
-		infoLog.Println("Array value to withdraw:", value)
-		infoLog.Println("Gas Budget:", gas)
-		infoLog.Println("Gas odject to pay:", primaryobj)
+		if value != "" {
+			infoLog.Println("RPC:", config.Default.Rpc)
+			infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			infoLog.Println("Primary coin:", primaryobj)
+			infoLog.Println("Array value to withdraw:", value)
+			infoLog.Println("Gas Budget:", gas)
+			infoLog.Println("Gas odject to pay:", primaryobj)
 
-		gasBudget := gas
-		stakesId := value
+			gasBudget := gas
+			stakesId := value
 
-		cmd := exec.Command(config.Default.SuiBinaryPath, "client", "call",
-			"--package", config.Default.Package,
-			"--module", config.Default.Module,
-			"--function", config.Default.Function,
-			"--args", config.Default.Args,
-			stakesId,
-			"--gas-budget="+gasBudget,
-			"--gas", primaryobj,
-			"--json")
+			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "call",
+				"--package", config.Default.Package,
+				"--module", config.Default.Module,
+				"--function", config.Default.Function,
+				"--args", config.Default.Args,
+				stakesId,
+				"--gas-budget="+gasBudget,
+				"--gas", primaryobj,
+				"--json")
 
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
+			cmd.Stdout = nil
 
-		runs := cmd.Run()
-		if runs != nil {
-			log.Fatal(runs)
+			outputFile := "output.txt"
+			filePathOutput := filepath.Join(usr.HomeDir, configPath, outputFile)
+			file, err := os.Create(filePathOutput)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer file.Close()
+
+			cmd.Stdout = file
+			cmd.Stderr = os.Stderr
+
+			err = cmd.Run()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			outputBytes, err := os.ReadFile(filePathOutput)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			var result MergeResponse
+			err = json.Unmarshal(outputBytes, &result)
+			if err != nil {
+				log.Fatal(err)
+			}
+			infoLog.Println("--------------------")
+			infoLog.Println("TX Status:", result.Effects.Status.Status)
+			infoLog.Println("--------------------")
+		} else {
+			infoLog.Println("Successful withdraw all sui::SuiStaked objects.")
 		}
 	}
 }
+
+//func sendSui(slice []string, recepient, amount string) {
+//	usr, err := user.Current()
+//	if err != nil {
+//		fmt.Errorf("failed to get current user: %s", err)
+//	}
+//	filePath := filepath.Join(usr.HomeDir, configFilePath)
+//	config, err := ReadConfigFile(filePath)
+//	if err != nil {
+//		fmt.Println(err)
+//		return
+//	}
+//	for _, value := range slice[0:] {
+//		infoLog.Println("RPC:", config.Default.Rpc)
+//		infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+//		infoLog.Println("Primary coin:", primaryobj)
+//		infoLog.Println("Array value to withdraw:", value)
+//		infoLog.Println("Gas Budget:", gas)
+//		infoLog.Println("Gas odject to pay:", primaryobj)
+//
+//		gasBudget := gas
+//		inputCoins := value
+//
+//		cmd := exec.Command(config.Default.SuiBinaryPath, "client", "pay-sui",
+//			"--recipients", recepient,
+//			"--amounts", amount,
+//			"--input-coins", inputCoins,
+//			"--gas-budget="+gasBudget,
+//			"--json")
+//
+//		cmd.Stdout = os.Stdout
+//		cmd.Stderr = os.Stderr
+//
+//		runs := cmd.Run()
+//		if runs != nil {
+//			log.Fatal(runs)
+//		}
+//	}
+//}
