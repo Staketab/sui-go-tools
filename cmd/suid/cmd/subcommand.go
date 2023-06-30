@@ -20,6 +20,7 @@ Flags:
 	RootCmd.AddCommand(mergeCoinCommand)
 	RootCmd.AddCommand(mergeCoinsCommand)
 	RootCmd.AddCommand(withdrawCommand)
+	//RootCmd.AddCommand(sendCommand)
 	RootCmd.AddCommand(versionCommand)
 }
 
@@ -63,6 +64,18 @@ var withdrawCommand = &cobra.Command{
 		getPayObj()
 	},
 }
+
+//var sendCommand = &cobra.Command{
+//	Use:   "send",
+//	Short: "Send SUI",
+//	Long:  "Send SUI",
+//	Run: func(cmd *cobra.Command, args []string) {
+//		recipient, _ := cmd.Flags().GetString("recipient")
+//		amount, _ := cmd.Flags().GetString("amount")
+//
+//		mergeCoin(amount, recipient)
+//	},
+//}
 
 var versionCommand = &cobra.Command{
 	Use:   "version",
