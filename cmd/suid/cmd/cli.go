@@ -153,18 +153,18 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 
 			err = cmd.Run()
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal("Run failed", err)
 			}
 
 			outputBytes, err := os.ReadFile(filePathOutput)
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal("Read bytes failed", err)
 			}
 
 			var result MergeResponse
 			err = json.Unmarshal(outputBytes, &result)
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal("Unmarshal error", err)
 			}
 			infoLog.Println("--------------------")
 			infoLog.Println("TX Status:", result.Effects.Status.Status)
