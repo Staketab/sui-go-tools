@@ -113,6 +113,7 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 	usr, err := user.Current()
 	if err != nil {
 		fmt.Errorf("failed to get current user: %s", err)
+		return
 	}
 	filePath := filepath.Join(usr.HomeDir, configFilePath)
 	config, err := ReadConfigFile(filePath)
@@ -138,8 +139,6 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 				"--gas-budget="+gasBudget,
 				"--json")
 
-			cmd.Stdout = nil
-
 			outputFile := "output.txt"
 			filePathOutput := filepath.Join(usr.HomeDir, configPath, outputFile)
 			file, err := os.Create(filePathOutput)
@@ -153,7 +152,7 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 
 			err = cmd.Run()
 			if err != nil {
-				log.Fatal("Run failed", err)
+				log.Fatal("Run failed - ", err)
 			}
 
 			outputBytes, err := os.ReadFile(filePathOutput)
