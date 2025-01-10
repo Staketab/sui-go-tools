@@ -44,11 +44,17 @@ func getPayObj() {
 	}
 	var coinObjectIds []string
 	for _, data := range result.Result.Data {
+		//infoLog.Printf("Found Coin Object:", data)
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
 
-	a := coinObjectIds[0]
+	if len(coinObjectIds) == 0 {
+		errorLog.Println("No coin objects found for withdrawal.")
+		return
+	}
 
+	a := coinObjectIds[0]
+	infoLog.Println("Coin Object ID:", a)
 	getWithdrawData(a)
 }
 

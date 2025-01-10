@@ -21,28 +21,16 @@ type DefaultConfig struct {
 type Result struct {
 	Result struct {
 		Data []struct {
-			CoinType            string `json:"coinType"`
-			CoinObjectId        string `json:"coinObjectId"`
-			Version             string `json:"version"`
-			Digest              string `json:"digest"`
-			Balance             string `json:"balance"`
-			PreviousTransaction string `json:"previousTransaction"`
+			CoinObjectId string `json:"coinObjectId"`
 		} `json:"data"`
 	} `json:"result"`
 }
 
 type Response struct {
-	JSONRPC string `json:"jsonrpc"`
-	Result  []struct {
-		ValidatorAddress string `json:"validatorAddress"`
-		StakingPool      string `json:"stakingPool"`
-		Stakes           []struct {
-			StakedSuiID       string `json:"stakedSuiId"`
-			StakeRequestEpoch string `json:"stakeRequestEpoch"`
-			StakeActiveEpoch  string `json:"stakeActiveEpoch"`
-			Principal         string `json:"principal"`
-			Status            string `json:"status"`
-			EstimatedReward   string `json:"estimatedReward"`
+	Result []struct {
+		Stakes []struct {
+			StakedSuiID string `json:"stakedSuiId"`
+			Status      string `json:"status"`
 		} `json:"stakes"`
 	} `json:"result"`
 	ID string `json:"id"`
