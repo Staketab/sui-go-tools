@@ -15,26 +15,63 @@ import (
 	toml "github.com/pelletier/go-toml"
 )
 
-func isRpcWorking() {
-	infoLog.Println("Start checking RPC status.")
+// GetActiveChainConfig returns the configuration for the currently active chain
+func GetActiveChainConfig() (ChainConfig, error) {
 	usr, err := user.Current()
 	if err != nil {
-		fmt.Errorf("failed to get current user: %s", err)
+		return ChainConfig{}, fmt.Errorf("failed to get current user: %s", err)
 	}
 	filePath := filepath.Join(usr.HomeDir, configFilePath)
 	config, err := ReadConfigFile(filePath)
 	if err != nil {
+		return ChainConfig{}, err
+	}
+
+	switch activeChain {
+	case ChainSUI:
+		return config.SUI, nil
+	case ChainIOTA:
+		return config.IOTA, nil
+	default:
+		return ChainConfig{}, fmt.Errorf("unknown chain: %s", activeChain)
+	}
+}
+
+// GetChainName returns the display name for the active chain
+func GetChainName() string {
+	switch activeChain {
+	case ChainSUI:
+		return "SUI"
+	case ChainIOTA:
+		return "IOTA"
+	default:
+		return strings.ToUpper(activeChain)
+	}
+}
+
+func isRpcWorking() {
+	infoLog.Printf("Start checking %s RPC status.", GetChainName())
+
+	chainConfig, err := GetActiveChainConfig()
+	if err != nil {
 		errorLog.Println(err)
 		return
 	}
-	url := config.Default.Rpc
 
-	payload := []byte(`{
+	url := chainConfig.Rpc
+
+	// Determine RPC method based on chain
+	method := "sui_getChainIdentifier"
+	if activeChain == ChainIOTA {
+		method = "iota_getChainIdentifier"
+	}
+
+	payload := []byte(fmt.Sprintf(`{
 		"jsonrpc": "2.0",
 		"id": "1",
-		"method": "sui_getChainIdentifier",
+		"method": "%s",
 		"params": []
-	}`)
+	}`, method))
 
 	request, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
 	if err != nil {
@@ -57,11 +94,11 @@ func isRpcWorking() {
 	statusCode := response.StatusCode
 
 	if statusCode == 200 {
-		infoLog.Println("RPC is working, status code:", statusCode)
+		successLog.Printf("%s RPC is working (status: %d)", GetChainName(), statusCode)
 		time.Sleep(2 * time.Second)
 	} else {
-		infoLog.Println("RPC is not working, status code:", statusCode)
-		errorLog.Fatal("Exit...", statusCode)
+		errorLog.Printf("%s RPC is not working (status: %d)", GetChainName(), statusCode)
+		errorLog.Fatal("Exit...")
 	}
 }
 
@@ -78,7 +115,7 @@ func createDirectory(path string) error {
 		return fmt.Errorf("failed to create directory: %s", err)
 	}
 
-	infoLog.Printf("Directory created: %s\n", fullPath)
+	successLog.Printf("Directory created: %s", fullPath)
 	return nil
 }
 
@@ -88,13 +125,26 @@ func createConfigFile(path string) error {
 		return fmt.Errorf("failed to get current user: %s", err)
 	}
 	filePath := filepath.Join(usr.HomeDir, path)
-	content := []byte(`[DEFAULT]
+
+	content := []byte(`# SUI blockchain configuration
+[SUI]
 rpc = "https://rpc-mainnet.suiscan.xyz:443"
-sui_binary_path = "/root/sui/target/debug/sui"
+binary_path = "/opt/homebrew/bin/sui"
 address = ""
 gas_budget = "20000000"
 package = "0x3"
 module = "sui_system"
+function = "request_withdraw_stake"
+args = "0x5"
+
+# IOTA blockchain configuration
+[IOTA]
+rpc = "https://api.mainnet.iota.cafe"
+binary_path = "/opt/homebrew/bin/iota"
+address = ""
+gas_budget = "20000000"
+package = "0x3"
+module = "iota_system"
 function = "request_withdraw_stake"
 args = "0x5"
 `)
@@ -104,7 +154,7 @@ args = "0x5"
 		return fmt.Errorf("failed to create config file: %s", err)
 	}
 
-	infoLog.Printf("Config file created: %s\n", filePath)
+	successLog.Printf("Config file created: %s", filePath)
 	return nil
 }
 

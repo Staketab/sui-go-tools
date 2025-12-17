@@ -14,11 +14,10 @@ import (
 
 var RootCmd = &cobra.Command{
 	Use:   binary,
-	Short: "SUI tool to merge-coins, withdraw stakes and others.",
-	Long:  "SUI tool to merge-coins, withdraw stakes and others.",
+	Short: "Multi-chain CLI for SUI and IOTA blockchains",
+	Long:  "MCLI - Multi-chain CLI to merge-coins, withdraw stakes and send transactions for SUI and IOTA blockchains.",
 	Run: func(cmd *cobra.Command, args []string) {
-		// Default behavior when the root command is executed
-		infoLog.Println("Welcome to:", binary)
+		cmd.Help()
 	},
 }
 
@@ -37,37 +36,52 @@ func initConfigFile() {
 }
 
 func readConfig() {
-	config, err := ReadConfigFile(configFilePath)
+	usr, err := user.Current()
+	if err != nil {
+		errorLog.Println(err)
+		return
+	}
+	filePath := filepath.Join(usr.HomeDir, configFilePath)
+	config, err := ReadConfigFile(filePath)
 	if err != nil {
 		errorLog.Println(err)
 		return
 	}
 
-	infoLog.Println("RPC:", config.Default.Rpc)
-	infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
-	infoLog.Println("Address:", config.Default.Address)
-	infoLog.Println("Gas object to pay:", config.Default.GasObjToPay)
-	infoLog.Println("Primary coin:", config.Default.PrimaryCoin)
+	fmt.Printf("\n%s%s=== SUI Configuration ===%s\n", colorBold, colorBlue, colorReset)
+	fmt.Printf("  RPC:         %s\n", config.SUI.Rpc)
+	fmt.Printf("  Binary:      %s\n", config.SUI.BinaryPath)
+	fmt.Printf("  Address:     %s\n", config.SUI.Address)
+	fmt.Printf("  Gas budget:  %s\n", config.SUI.GasBudget)
+
+	fmt.Printf("\n%s%s=== IOTA Configuration ===%s\n", colorBold, colorCyan, colorReset)
+	fmt.Printf("  RPC:         %s\n", config.IOTA.Rpc)
+	fmt.Printf("  Binary:      %s\n", config.IOTA.BinaryPath)
+	fmt.Printf("  Address:     %s\n", config.IOTA.Address)
+	fmt.Printf("  Gas budget:  %s\n\n", config.IOTA.GasBudget)
 }
+
 func mergeCoin(slice []string, primaryobj string) {
-	config, err := ReadConfigFile(configFilePath)
+	chainConfig, err := GetActiveChainConfig()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+
 	for _, value := range slice {
 		if value != "" {
 			primaryCoin := primaryobj
 			coinToMerge := value
-			gasBudget := config.Default.GasBudget
+			gasBudget := chainConfig.GasBudget
 
-			infoLog.Println("RPC:", config.Default.Rpc)
-			infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			infoLog.Printf("Chain: %s", GetChainName())
+			infoLog.Println("RPC:", chainConfig.Rpc)
+			infoLog.Println("Binary path:", chainConfig.BinaryPath)
 			infoLog.Println("Primary coin:", primaryCoin)
 			infoLog.Println("Array value to merge:", coinToMerge)
 			infoLog.Println("Gas Budget:", gasBudget)
 
-			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "merge-coin",
+			cmd := exec.Command(chainConfig.BinaryPath, "client", "merge-coin",
 				"--primary-coin", primaryCoin,
 				"--coin-to-merge", coinToMerge,
 				"--gas-budget="+gasBudget,
@@ -75,8 +89,10 @@ func mergeCoin(slice []string, primaryobj string) {
 
 			cmd.Stdout = nil
 
+			usr, _ := user.Current()
 			outputFile := "output.txt"
-			file, err := os.Create(configPath + outputFile)
+			filePathOutput := filepath.Join(usr.HomeDir, configPath, outputFile)
+			file, err := os.Create(filePathOutput)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -90,7 +106,7 @@ func mergeCoin(slice []string, primaryobj string) {
 				log.Fatal(err)
 			}
 
-			outputBytes, err := os.ReadFile(configPath + outputFile)
+			outputBytes, err := os.ReadFile(filePathOutput)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -100,40 +116,50 @@ func mergeCoin(slice []string, primaryobj string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			infoLog.Println("--------------------")
-			infoLog.Println("TX Status:", result.Effects.Status.Status)
-			infoLog.Println("--------------------")
+			printTxStatus(result.Effects.Status.Status)
 		} else {
-			infoLog.Println("Coin ID merged.")
+			successLog.Println("Coin ID merged.")
 		}
 	}
 }
 
+func printTxStatus(status string) {
+	fmt.Println("--------------------")
+	if status == "success" {
+		fmt.Printf("TX Status: %s%s%s\n", colorGreen, status, colorReset)
+	} else {
+		fmt.Printf("TX Status: %s%s%s\n", colorRed, status, colorReset)
+	}
+	fmt.Println("--------------------")
+}
+
 func mergeCoins(slice []string, gas, primaryobj string) {
+	chainConfig, err := GetActiveChainConfig()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	usr, err := user.Current()
 	if err != nil {
 		fmt.Errorf("failed to get current user: %s", err)
 		return
 	}
-	filePath := filepath.Join(usr.HomeDir, configFilePath)
-	config, err := ReadConfigFile(filePath)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+
 	for _, value := range slice[1:] {
 		if value != "" {
 			primaryCoin := primaryobj
 			coinToMerge := value
 			gasBudget := gas
 
-			infoLog.Println("RPC:", config.Default.Rpc)
-			infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			infoLog.Printf("Chain: %s", GetChainName())
+			infoLog.Println("RPC:", chainConfig.Rpc)
+			infoLog.Println("Binary path:", chainConfig.BinaryPath)
 			infoLog.Println("Primary coin:", primaryCoin)
 			infoLog.Println("Array value to merge:", coinToMerge)
 			infoLog.Println("Gas Budget:", gasBudget)
 
-			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "merge-coin",
+			cmd := exec.Command(chainConfig.BinaryPath, "client", "merge-coin",
 				"--primary-coin", primaryCoin,
 				"--coin-to-merge", coinToMerge,
 				"--gas-budget="+gasBudget,
@@ -165,43 +191,43 @@ func mergeCoins(slice []string, gas, primaryobj string) {
 			if err != nil {
 				log.Fatal("Unmarshal error", err)
 			}
-			infoLog.Println("--------------------")
-			infoLog.Println("TX Status:", result.Effects.Status.Status)
-			infoLog.Println("--------------------")
+			printTxStatus(result.Effects.Status.Status)
 		} else {
-			infoLog.Println("All coins merged.")
+			successLog.Println("All coins merged.")
 		}
 	}
 }
 
 func withdrawStakes(slice []string, gas, primaryobj string) {
-	usr, err := user.Current()
-	if err != nil {
-		fmt.Errorf("failed to get current user: %s", err)
-	}
-	filePath := filepath.Join(usr.HomeDir, configFilePath)
-	config, err := ReadConfigFile(filePath)
+	chainConfig, err := GetActiveChainConfig()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Errorf("failed to get current user: %s", err)
+	}
+
 	for _, value := range slice[0:] {
 		if value != "" {
-			infoLog.Println("RPC:", config.Default.Rpc)
-			infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
+			infoLog.Printf("Chain: %s", GetChainName())
+			infoLog.Println("RPC:", chainConfig.Rpc)
+			infoLog.Println("Binary path:", chainConfig.BinaryPath)
 			infoLog.Println("Primary coin:", primaryobj)
 			infoLog.Println("Array value to withdraw:", value)
 			infoLog.Println("Gas Budget:", gas)
-			infoLog.Println("Gas odject to pay:", primaryobj)
+			infoLog.Println("Gas object to pay:", primaryobj)
 
 			gasBudget := gas
 			stakesId := value
 
-			cmd := exec.Command(config.Default.SuiBinaryPath, "client", "call",
-				"--package", config.Default.Package,
-				"--module", config.Default.Module,
-				"--function", config.Default.Function,
-				"--args", config.Default.Args,
+			cmd := exec.Command(chainConfig.BinaryPath, "client", "call",
+				"--package", chainConfig.Package,
+				"--module", chainConfig.Module,
+				"--function", chainConfig.Function,
+				"--args", chainConfig.Args,
 				stakesId,
 				"--gas-budget="+gasBudget,
 				"--gas", primaryobj,
@@ -235,50 +261,9 @@ func withdrawStakes(slice []string, gas, primaryobj string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			infoLog.Println("--------------------")
-			infoLog.Println("TX Status:", result.Effects.Status.Status)
-			infoLog.Println("--------------------")
+			printTxStatus(result.Effects.Status.Status)
 		} else {
-			infoLog.Println("Successful withdraw all sui::SuiStaked objects.")
+			successLog.Printf("Successful withdraw all %s staked objects.", GetChainName())
 		}
 	}
 }
-
-//func sendSui(slice []string, recepient, amount string) {
-//	usr, err := user.Current()
-//	if err != nil {
-//		fmt.Errorf("failed to get current user: %s", err)
-//	}
-//	filePath := filepath.Join(usr.HomeDir, configFilePath)
-//	config, err := ReadConfigFile(filePath)
-//	if err != nil {
-//		fmt.Println(err)
-//		return
-//	}
-//	for _, value := range slice[0:] {
-//		infoLog.Println("RPC:", config.Default.Rpc)
-//		infoLog.Println("SUI binary path:", config.Default.SuiBinaryPath)
-//		infoLog.Println("Primary coin:", primaryobj)
-//		infoLog.Println("Array value to withdraw:", value)
-//		infoLog.Println("Gas Budget:", gas)
-//		infoLog.Println("Gas odject to pay:", primaryobj)
-//
-//		gasBudget := gas
-//		inputCoins := value
-//
-//		cmd := exec.Command(config.Default.SuiBinaryPath, "client", "pay-sui",
-//			"--recipients", recepient,
-//			"--amounts", amount,
-//			"--input-coins", inputCoins,
-//			"--gas-budget="+gasBudget,
-//			"--json")
-//
-//		cmd.Stdout = os.Stdout
-//		cmd.Stderr = os.Stderr
-//
-//		runs := cmd.Run()
-//		if runs != nil {
-//			log.Fatal(runs)
-//		}
-//	}
-//}

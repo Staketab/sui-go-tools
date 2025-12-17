@@ -1,17 +1,17 @@
-DAEMON_NAME = suid
+DAEMON_NAME = mcli
 BUILD_FLAGS :=
 
 all: go.sum build install
 
 install: go.sum
-	@echo "--> Installing suid sui-tool"
+	@echo "--> Installing mcli"
 	go mod tidy
-	go install $(BUILD_FLAGS) ./cmd/$(DAEMON_NAME)
+	go install $(BUILD_FLAGS) ./cmd/suid
 
 build: go.sum
-	@echo "--> Building suid sui-tool"
+	@echo "--> Building mcli"
 	go mod tidy
-	go build $(BUILD_FLAGS) -o ./build/$(DAEMON_NAME) ./cmd/$(DAEMON_NAME)
+	go build $(BUILD_FLAGS) -o ./build/$(DAEMON_NAME) ./cmd/suid
 
 go.sum: go.mod
 	@echo "--> Ensure dependencies have not been modified"
