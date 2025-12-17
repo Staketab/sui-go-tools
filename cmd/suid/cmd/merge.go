@@ -3,34 +3,38 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"os/user"
-	"path/filepath"
 	"time"
 )
 
 func getMergeAll() {
 	isRpcWorking()
-	usr, err := user.Current()
-	if err != nil {
-		fmt.Errorf("failed to get current user: %s", err)
-	}
-	filePath := filepath.Join(usr.HomeDir, configFilePath)
-	config, err := ReadConfigFile(filePath)
+
+	chainConfig, err := GetActiveChainConfig()
 	if err != nil {
 		errorLog.Println(err)
 		return
 	}
-	url := config.Default.Rpc
-	addr := config.Default.Address
-	payload := `{
+
+	url := chainConfig.Rpc
+	addr := chainConfig.Address
+
+	// Determine coin type and RPC method based on chain
+	coinType := "0x2::sui::SUI"
+	rpcMethod := "suix_getCoins"
+	if activeChain == ChainIOTA {
+		coinType = "0x2::iota::IOTA"
+		rpcMethod = "iotax_getCoins"
+	}
+
+	payload := fmt.Sprintf(`{
 	    "jsonrpc": "2.0",
 	    "id": "1",
-	    "method": "suix_getCoins",
+	    "method": "%s",
 	    "params": {
-	        "owner": "` + addr + `"
+	        "owner": "%s"
 	    },
-	    "coin_type": "0x2::sui::SUI"
-	}`
+	    "coin_type": "%s"
+	}`, rpcMethod, addr, coinType)
 
 	jsonStr, err := sendRequest(url, payload)
 	if err != nil {
@@ -46,16 +50,16 @@ func getMergeAll() {
 	for _, data := range result.Result.Data {
 		coinObjectIds = append(coinObjectIds, data.CoinObjectId)
 	}
-	infoLog.Println("Coin Object IDs array:", coinObjectIds)
+	infoLog.Printf("[%s] Coin Object IDs array: %v", GetChainName(), coinObjectIds)
 
 	if len(coinObjectIds) != 1 {
 		a := coinObjectIds
-		b := config.Default.GasBudget
+		b := chainConfig.GasBudget
 		c := coinObjectIds[0]
 
 		time.Sleep(2 * time.Second)
 		mergeCoins(a, b, c)
 	} else {
-		infoLog.Println("No coins objects found for merge.")
+		infoLog.Printf("[%s] No coins objects found for merge.", GetChainName())
 	}
 }
