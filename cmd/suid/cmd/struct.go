@@ -1,21 +1,21 @@
 package cmd
 
-type Config struct {
-	Default DefaultConfig `toml:"DEFAULT"`
+// ChainConfig holds configuration for a specific blockchain network
+type ChainConfig struct {
+	Rpc        string `toml:"rpc"`
+	BinaryPath string `toml:"binary_path"`
+	Address    string `toml:"address"`
+	GasBudget  string `toml:"gas_budget"`
+	Package    string `toml:"package"`
+	Module     string `toml:"module"`
+	Function   string `toml:"function"`
+	Args       string `toml:"args"`
 }
 
-type DefaultConfig struct {
-	Rpc           string `toml:"rpc"`
-	SuiBinaryPath string `toml:"sui_binary_path"`
-	Address       string `toml:"address"`
-	GasObjToPay   string `toml:"gas_object_to_pay"`
-	PrimaryCoin   string `toml:"primary_coin"`
-	CoinToMerge   string `toml:"coins_to_merge"`
-	GasBudget     string `toml:"gas_budget"`
-	Package       string `toml:"package"`
-	Module        string `toml:"module"`
-	Function      string `toml:"function"`
-	Args          string `toml:"args"`
+// Config holds configuration for all supported chains
+type Config struct {
+	SUI  ChainConfig `toml:"SUI"`
+	IOTA ChainConfig `toml:"IOTA"`
 }
 
 type Result struct {
@@ -29,8 +29,9 @@ type Result struct {
 type Response struct {
 	Result []struct {
 		Stakes []struct {
-			StakedSuiID string `json:"stakedSuiId"`
-			Status      string `json:"status"`
+			StakedSuiID  string `json:"stakedSuiId"`
+			StakedIotaID string `json:"stakedIotaId"`
+			Status       string `json:"status"`
 		} `json:"stakes"`
 	} `json:"result"`
 	ID string `json:"id"`

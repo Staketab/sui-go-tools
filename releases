@@ -1,3 +1,27 @@
-tag_name = "v1.1.0"
-release_name = "Release of suid SUI tool v1.1.0"
-body = "Fix suix_getCoins function."
+tag_name = "v1.3.0"
+release_name = "MCLI v1.3.0 - Multi-chain CLI for SUI and IOTA"
+body = """
+## What's New
+
+### Multi-chain Support
+- Added IOTA blockchain support alongside SUI
+- New command structure: `mcli sui <command>` and `mcli iota <command>`
+- Separate configuration for each chain in config.toml
+
+### New Features
+- Colored terminal output (INFO, SUCCESS, ERROR, WARN)
+- Improved logging with clear status indicators
+- TX Status highlighted in green (success) or red (failure)
+
+### Commands
+- `mcli sui merge-all` / `mcli iota merge-all` - Merge all coins
+- `mcli sui withdraw-all` / `mcli iota withdraw-all` - Withdraw all stakes
+- `mcli sui send -r <address> -a <amount>` / `mcli iota send -r <address> -a <amount>` - Send tokens
+- `mcli init` - Initialize configuration
+- `mcli version` - Show version
+
+### Breaking Changes
+- Binary renamed from `suid` to `mcli`
+- Config path changed from `.sui-config/` to `.mcli-config/`
+- Old command format removed (must use `sui` or `iota` subcommand)
+"""
