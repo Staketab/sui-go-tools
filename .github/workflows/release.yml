@@ -4,6 +4,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+
 jobs:
   create_release_and_tag:
     runs-on: ubuntu-latest
@@ -54,4 +57,4 @@ jobs:
           body_path: release_body.md
           files: ./build/mcli
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
