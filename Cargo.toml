@@ -1,0 +1,32 @@
+[package]
+name = "mcli"
+version = "2.0.0"
+edition = "2024"
+rust-version = "1.94"
+description = "Validator toolkit for SUI, IKA, Walrus and IOTA: withdraw stakes, collect commission, merge and send coins"
+repository = "https://github.com/Staketab/sui-go-tools"
+publish = false
+
+[dependencies]
+anyhow = "1"
+base64 = "0.22"
+bcs = "0.1"
+bech32 = "0.11"
+clap = { version = "4", features = ["derive", "env"] }
+dotenvy = "0.15"
+futures = "0.3"
+inquire = "0.9"
+prost-types = "0.14"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sui-crypto = { version = "0.4", features = ["ed25519", "secp256k1", "secp256r1", "bech32"] }
+sui-rpc = "0.4"
+sui-sdk-types = { version = "0.4", features = ["serde", "hash"] }
+sui-transaction-builder = "0.4"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
+toml = "0.8"
+
+[profile.release]
+lto = "thin"
+strip = true

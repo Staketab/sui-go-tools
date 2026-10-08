@@ -1,20 +1,31 @@
-DAEMON_NAME = mcli
-BUILD_FLAGS :=
+BINARY = mcli
+# Where cargo puts its output: target/, or build.target-dir from .cargo/config.toml.
+TARGET_DIR = $(shell cargo metadata --format-version 1 --no-deps | sed -E 's/.*"target_directory":"([^"]*)".*/\1/')
 
-all: go.sum build install
+all: test build
 
-install: go.sum
-	@echo "--> Installing mcli"
-	go mod tidy
-	go install $(BUILD_FLAGS) ./cmd/suid
+# Builds ./mcli.
+build:
+	@echo "--> Building $(BINARY)"
+	cargo build --release --locked
+	cp "$(TARGET_DIR)/release/$(BINARY)" ./$(BINARY)
+	@echo "--> ./$(BINARY)"
 
-build: go.sum
-	@echo "--> Building mcli"
-	go mod tidy
-	go build $(BUILD_FLAGS) -o ./build/$(DAEMON_NAME) ./cmd/suid
+# Builds ./mcli and puts it on PATH (~/.cargo/bin).
+install: build
+	@echo "--> Installing $(BINARY)"
+	cargo install --path . --locked
 
-go.sum: go.mod
-	@echo "--> Ensure dependencies have not been modified"
-	GO111MODULE=on go mod verify
+test:
+	cargo test --release --locked
 
+lint:
+	cargo fmt --check
+	cargo clippy --release --all-targets --locked -- -D warnings
+
+# The previous Go version (1.x), kept until it is removed from the repository.
+go-build:
+	go build -o ./build/$(BINARY) ./cmd/suid
+
+.PHONY: all build install test lint go-build
 .DEFAULT_GOAL := build

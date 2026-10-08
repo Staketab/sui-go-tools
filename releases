@@ -1,27 +1,34 @@
-tag_name = "v1.3.0"
-release_name = "MCLI v1.3.0 - Multi-chain CLI for SUI and IOTA"
+tag_name = "v2.0.0"
+release_name = "MCLI v2.0.0 - SUI, IKA, Walrus and IOTA validator toolkit in Rust"
 body = """
 ## What's New
 
-### Multi-chain Support
-- Added IOTA blockchain support alongside SUI
-- New command structure: `mcli sui <command>` and `mcli iota <command>`
-- Separate configuration for each chain in config.toml
+### IKA validators
+- `mcli ika status` - validators whose commission caps your keys hold, with the commission ready to collect
+- `mcli ika collect` - collect commission of every validator in one run (`--validator`, `--to`, `--amount`)
+- `mcli ika send` - move IKA from a validator account
 
-### New Features
-- Colored terminal output (INFO, SUCCESS, ERROR, WARN)
-- Improved logging with clear status indicators
-- TX Status highlighted in green (success) or red (failure)
+### Walrus storage nodes
+- `mcli walrus status` - nodes whose commission your keys receive, with the part ready to collect and the part locked until the epoch's voting ends
+- `mcli walrus collect` - collect commission of every node in one transaction (`--node`, `--to`); works when the receiver is an address or the node's `StorageNodeCap`
+- `mcli walrus send` - move WAL from a node account
 
-### Commands
-- `mcli sui merge-all` / `mcli iota merge-all` - Merge all coins
-- `mcli sui withdraw-all` / `mcli iota withdraw-all` - Withdraw all stakes
-- `mcli sui send -r <address> -a <amount>` / `mcli iota send -r <address> -a <amount>` - Send tokens
-- `mcli init` - Initialize configuration
-- `mcli version` - Show version
+### Keys in one place, no profile switching
+- Private keys live in `~/.mcli/.env` (`SUI_PRIVATE_KEY`, `IOTA_PRIVATE_KEY`, `IKA_PRIVATE_KEY_<N>`, `WALRUS_PRIVATE_KEY`); the file must be `chmod 600`
+- The tool signs transactions itself: the `sui` and `iota` binaries and their active profiles are no longer needed
+
+### Interactive menu
+- Run `mcli` without arguments to pick the chain, action and account from menus
+
+### Rewritten in Rust
+- SUI uses gRPC through the official Mysten Rust SDK (Mysten full nodes no longer serve JSON-RPC)
+- `withdraw-all` withdraws every stake, rewards included, in a single transaction (SUI goes to the address balance, IOTA arrives as one coin)
+- `send` executes the transfer instead of printing a script
+- Every transaction is simulated and shown before signing; `--dry-run` and `--address` allow read-only runs
+- Transactions built by the RPC node are checked before signing: sender, called packages and recipients
 
 ### Breaking Changes
-- Binary renamed from `suid` to `mcli`
-- Config path changed from `.sui-config/` to `.mcli-config/`
-- Old command format removed (must use `sui` or `iota` subcommand)
+- `--amount` is in whole coins (`12.5`), not MIST/NANOS
+- Config moved from `~/.mcli-config/config.toml` to `~/.mcli/config.toml`; addresses come from the keys
+- Run `mcli init` to create the new config and the `.env` template
 """

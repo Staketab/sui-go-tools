@@ -1,0 +1,6 @@
+# The Sui SDK crates follow recent Rust closely (sui-transaction-builder 0.4 needs 1.91+),
+# so builds use the toolchain the code is tested with. rustup installs it on first use.
+[toolchain]
+channel = "1.94.1"
+profile = "minimal"
+components = ["rustfmt", "clippy"]
